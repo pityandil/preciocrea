@@ -1,0 +1,622 @@
+﻿// STATE
+// ===================================================
+const S = {
+  step: 1,
+  p: {
+    name:'', matTotal:0, hours:0, rate:0,
+    cr:'facil', fixed:0, units:20, margin:50
+  },
+  products: []
+};
+
+const CR_MULT = { facil:0.05, moderado:0.15, intenso:0.25, obra:0.40 };
+const IVA     = 0.19;          // Impuesto al Valor Agregado (Chile)
+const MARGINS = [30, 50, 80, 120]; // Opciones de margen de ganancia (%)
+const WISDOMS = [
+  p => `El precio mínimo de <strong>${fmt(p.minP)}</strong> es tu suelo: <strong>nunca vendas bajo ese valor</strong>, ni en liquidaciones ni a familiares. El precio ideal (<strong>${fmt(p.idealP)}</strong>) es lo que te permite reinvertir y crecer de verdad.`,
+  () => `Recuerda: el cliente que valora tu arte pagará el precio justo. <strong>Quienes solo buscan "lo más barato" no son tus clientes ideales.</strong> Cobrar bien atrae a quienes atesorarán tu trabajo.`,
+  () => `<strong>¡Tu sueldo es un costo, no un regalo!</strong> Si no te pagaste a ti misma, el negocio no es rentable aunque la cuenta bancaria tenga plata. Págate primero.`,
+  () => `Fijar tu precio mirando solo a la competencia es una <strong>trampa</strong>. Tu vecina puede tener costos distintos, o estar perdiendo dinero sin saberlo. Confía en tus propios números. 🔢`
+];
+
+// ===================================================
+// INIT
+// ===================================================
+(function init() {
+  try {
+    const saved = localStorage.getItem('pc_v1');
+    if (saved) S.products = JSON.parse(saved);
+  } catch(e) {}
+  renderHome();
+})();
+
+// ===================================================
+// VIEWS
+// ===================================================
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ===================================================
+// HOME
+// ===================================================
+function renderHome() {
+  const list = document.getElementById('products-list');
+  const statsRow = document.getElementById('stats-row');
+  const listTitle = document.getElementById('list-title');
+
+  if (S.products.length === 0) {
+    statsRow.style.display = 'none';
+    listTitle.style.display = 'none';
+    list.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🌱</div>
+        <p>Aún no tienes productos guardados.<br>¡Calcula el precio de tu primera creación!</p>
+      </div>`;
+    return;
+  }
+
+  statsRow.style.display = 'grid';
+  listTitle.style.display = 'block';
+  document.getElementById('stat-count').textContent = S.products.length;
+  const avg = S.products.reduce((s,p) => s + p.idealP, 0) / S.products.length;
+  document.getElementById('stat-avg').textContent = fmtShort(avg);
+
+  list.innerHTML = S.products.map(p => `
+    <div class="product-card" onclick="showDetail(${p.id})">
+      <div class="pc-emoji">${p.emoji}</div>
+      <div class="pc-info">
+        <div class="pc-name">${esc(p.name)}</div>
+        <div class="pc-prices">Ideal: <strong>${fmt(p.idealP)}</strong> · c/IVA: <strong>${fmt(p.idealP* (1 + IVA))}</strong></div>
+      </div>
+      <div class="pc-actions">
+        <button class="pc-edit" onclick="showDetail(event,${p.id})" title="Editar">✏️</button>
+        <button class="pc-delete" onclick="delProduct(event,${p.id})" title="Eliminar">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+// ===================================================
+// CALCULATOR
+// ===================================================
+function startCalc() {
+  resetState();
+  S.step = 1;
+  showView('view-calc');
+  document.querySelectorAll('.calc-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step-1').classList.add('active');
+  updateProg(1);
+}
+
+function resetState() {
+  S.p = { name:'', matTotal:0, hours:0, rate:0, cr:'facil', fixed:0, units:20, margin:50 };
+
+  // Reset fields
+  const q = id => document.getElementById(id);
+  q('inp-name').value = '';
+  q('inp-hours').value = '';
+  q('inp-rate').value = '';
+  q('inp-fixed').value = '';
+  q('inp-units').value = '20';
+  q('labor-preview').style.display = 'none';
+  q('mat-total').textContent = '$0';
+  q('mat-list').innerHTML = `
+    <div class="mat-row">
+      <input class="field-input mat-name" type="text" placeholder="ej: Aceite de coco" style="--step-accent:var(--coral)">
+      <input class="field-input mat-cost" type="number" placeholder="$" min="0" oninput="calcMatTotal()" style="--step-accent:var(--coral)">
+      <button class="btn-rem" onclick="remMat(this)">✕</button>
+    </div>`;
+
+  // Reset creativity
+  document.querySelectorAll('.cr-option').forEach(o => o.classList.remove('sel'));
+  document.querySelector('[data-val="facil"]').classList.add('sel');
+
+  // Reset margin buttons
+  document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('[data-m="50"]').classList.add('active');
+}
+
+function navBack() {
+  if (S.step === 1) showView('view-home');
+  else goStep(S.step - 1);
+}
+
+function goStep(n) {
+  if (n === 2) {
+    const nm = document.getElementById('inp-name').value.trim();
+    if (!nm) { toast('¡Ponle nombre a tu creación! 🏷️'); return; }
+    S.p.name = nm;
+    // Validate that at least one material has a positive cost
+    const costs = Array.from(document.querySelectorAll('.mat-cost'));
+    const hasValidMat = costs.some(i => sanitizeNum(i.value) > 0);
+    if (!hasValidMat) { toast('Ingresa el costo de al menos un material 🧺'); return; }
+    S.p.matTotal = getMatTotal();
+  }
+  if (n === 3) {
+    const h = sanitizeNum(document.getElementById('inp-hours').value);
+    const r = sanitizeNum(document.getElementById('inp-rate').value);
+    if (h <= 0) { toast('Las horas deben ser mayor a 0 ⏰'); return; }
+    if (r <= 0) { toast('El valor hora debe ser mayor a 0 💙'); return; }
+    S.p.hours = h; S.p.rate = r;
+  }
+  document.querySelectorAll('.calc-step').forEach(s => s.classList.remove('active'));
+  document.getElementById(`step-${n}`).classList.add('active');
+  S.step = n;
+  updateProg(n);
+  window.scrollTo(0,0);
+}
+
+function updateProg(n) {
+  document.getElementById('prog-label').textContent = `Paso ${n} de 4`;
+  for (let i = 1; i <= 4; i++) {
+    const d = document.getElementById(`pd${i}`);
+    d.className = 'pdot';
+    if (i === n) d.classList.add('active');
+    else if (i < n) d.classList.add('done');
+  }
+}
+
+// ===================================================
+// MATERIALS
+// ===================================================
+function addMat() {
+  const list = document.getElementById('mat-list');
+  const row = document.createElement('div');
+  row.className = 'mat-row';
+  row.innerHTML = `
+    <input class="field-input mat-name" type="text" placeholder="ej: Fragancia" style="--step-accent:var(--coral)">
+    <input class="field-input mat-cost" type="number" placeholder="$" min="0" oninput="calcMatTotal()" style="--step-accent:var(--coral)">
+    <button class="btn-rem" onclick="remMat(this)">✕</button>`;
+  list.appendChild(row);
+  row.querySelector('input').focus();
+}
+
+function remMat(btn) {
+  const rows = document.querySelectorAll('.mat-row');
+  if (rows.length > 1) { btn.parentElement.remove(); calcMatTotal(); }
+  else toast('¡Al menos un material! 🧺');
+}
+
+function getMatTotal() {
+  return Array.from(document.querySelectorAll('.mat-cost'))
+    .reduce((s, i) => s + sanitizeNum(i.value), 0);
+}
+
+function calcMatTotal() {
+  // Also clamp the input itself to prevent negatives showing
+  document.querySelectorAll('.mat-cost').forEach(i => {
+    if (parseFloat(i.value) < 0) i.value = 0;
+  });
+  document.getElementById('mat-total').textContent = fmt(getMatTotal());
+}
+
+// ===================================================
+// LABOR PREVIEW
+// ===================================================
+function updateLaborPreview() {
+  const h = parseFloat(document.getElementById('inp-hours').value)||0;
+  const r = parseFloat(document.getElementById('inp-rate').value)||0;
+  const prev = document.getElementById('labor-preview');
+  if (h > 0 && r > 0) {
+    document.getElementById('labor-val').textContent = fmt(h * r);
+    prev.style.display = 'block';
+  } else {
+    prev.style.display = 'none';
+  }
+}
+
+// ===================================================
+// CREATIVITY
+// ===================================================
+function selCr(el) {
+  document.querySelectorAll('.cr-option').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  S.p.cr = el.dataset.val;
+}
+
+// ===================================================
+// RESULTS
+// ===================================================
+function showResults() {
+  const fixed = sanitizeNum(document.getElementById('inp-fixed').value);
+  const units = sanitizeNum(document.getElementById('inp-units').value);
+  if (units <= 0) { toast('Las unidades mensuales deben ser mayor a 0 📦'); return; }
+  S.p.fixed = fixed;
+  S.p.units = units;
+  renderResults();
+  showView('view-results');
+  setTimeout(animateBars, 350);
+}
+
+function calc(margin) {
+  const p = S.p;
+  const mat    = p.matTotal;
+  const labor  = p.hours * p.rate;
+  const cr     = (mat + labor) * (CR_MULT[p.cr] || 0.05);
+  const struct = p.fixed / Math.max(p.units, 1);
+  const minP   = mat + labor + cr + struct;
+  const idealP = minP * (1 + (margin !== undefined ? margin : p.margin) / 100);
+  return { mat, labor, cr, struct, minP, idealP };
+}
+
+function renderResults() {
+  const r = calc();
+  document.getElementById('res-name').textContent = S.p.name;
+  document.getElementById('res-min').textContent        = fmt(r.minP);
+  document.getElementById('res-min-iva').textContent    = fmt(r.minP * (1 + IVA));
+  document.getElementById('res-ideal').textContent      = fmt(r.idealP);
+  document.getElementById('res-ideal-iva').textContent  = fmt(r.idealP * (1 + IVA));
+  document.getElementById('confetti-emoji').textContent = getEmoji(S.p.name);
+
+  renderBars(r);
+  renderWisdom(r);
+}
+
+function renderBars(r) {
+  const bars = [
+    { e:'🧺', lbl:'Materiales',    val:r.mat,    c:'#FF6B6B' },
+    { e:'⏰', lbl:'Tu tiempo',      val:r.labor,  c:'#4D96FF' },
+    { e:'🎨', lbl:'Creatividad',    val:r.cr,     c:'#C77DFF' },
+    { e:'🏠', lbl:'Costos fijos',   val:r.struct, c:'#6BCB77' },
+  ];
+  const minP = r.minP;
+  document.getElementById('bar-items').innerHTML = bars.map(b => {
+    const pct = minP > 0 ? (b.val / minP * 100).toFixed(1) : 0;
+    return `
+      <div class="bar-item">
+        <div class="bar-header">
+          <div class="bar-lbl"><span class="bar-lbl-emoji">${b.e}</span>${b.lbl}</div>
+          <div class="bar-val">${fmt(b.val)} (${pct}%)</div>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill" data-w="${pct}" style="background:${b.c}; width:0"></div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function animateBars() {
+  document.querySelectorAll('.bar-fill').forEach(b => {
+    b.style.width = b.dataset.w + '%';
+  });
+}
+
+function renderWisdom(r) {
+  const fn = WISDOMS[Math.floor(Math.random() * WISDOMS.length)];
+  document.getElementById('wisdom-txt').innerHTML = fn(r);
+}
+
+function setMargin(btn) {
+  document.querySelectorAll('.m-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  S.p.margin = parseInt(btn.dataset.m);
+  const r = calc();
+  document.getElementById('res-ideal').textContent     = fmt(r.idealP);
+  document.getElementById('res-ideal-iva').textContent = fmt(r.idealP * (1 + IVA));
+}
+
+// ===================================================
+// SAVE
+// ===================================================
+function saveProduct() {
+  const r = calc();
+  const prod = {
+    id:     Date.now(),
+    name:   S.p.name,
+    emoji:  getEmoji(S.p.name),
+    date:   new Date().toLocaleDateString('es-CL'),
+    mat:    Math.round(r.mat),
+    labor:  Math.round(r.labor),
+    cr:     Math.round(r.cr),
+    struct: Math.round(r.struct),
+    minP:   Math.round(r.minP),
+    idealP: Math.round(r.idealP),
+    margin: S.p.margin,
+    crLvl:  S.p.cr
+  };
+  S.products.unshift(prod);
+  try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
+  renderHome();
+  toast('✨ ¡Producto guardado!');
+  setTimeout(() => showView('view-home'), 1400);
+}
+
+function delProduct(e, id) {
+  e.stopPropagation();
+  S.products = S.products.filter(p => p.id !== id);
+  try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
+  renderHome();
+  toast('🗑️ Producto eliminado');
+}
+
+// ===================================================
+// DETAIL (EDITABLE)
+// ===================================================
+function showDetail(idOrEvent, id) {
+  let realId = idOrEvent;
+  if (idOrEvent && typeof idOrEvent === 'object') {
+    idOrEvent.stopPropagation();
+    realId = id;
+  }
+  const p = S.products.find(p => p.id === realId);
+  if (!p) return;
+  document.getElementById('det-title').textContent = p.name;
+
+  const crOpts = [
+    { val:'facil',    e:'😊', lbl:'Fácil' },
+    { val:'moderado', e:'🤔', lbl:'Mod.' },
+    { val:'intenso',  e:'🔥', lbl:'Intenso' },
+    { val:'obra',     e:'🏆', lbl:'Autor' },
+  ];
+  const crGrid = crOpts.map(o => `
+    <div class="det-cr-opt${p.crLvl===o.val?' sel':''}" data-val="${o.val}" onclick="detSelCr(this,${realId})">
+      <div class="dco-emoji">${o.e}</div>
+      <div class="dco-lbl">${o.lbl}</div>
+    </div>`).join('');
+
+  const marginBtns = MARGINS.map(m => `
+    <button class="m-btn${p.margin===m?' active':''}" data-m="${m}" onclick="detSetMargin(this,${realId})">${m}%<br><small>${m===30?'Básico':m===50?'Sugerido':m===80?'Autor':'Premium'}</small></button>`
+  ).join('');
+
+  document.getElementById('det-body').innerHTML = `
+    <div class="detail-emoji-wrap">${p.emoji}</div>
+    <div class="detail-pname" id="det-pname">${esc(p.name)}</div>
+    <div class="detail-date">Guardado el ${p.date}</div>
+
+    <!-- PRICES -->
+    <div class="price-duo" style="padding:0; margin-bottom:20px">
+      <div class="price-box price-box-floor">
+        <div class="pb-tag">Precio Mínimo</div>
+        <div class="pb-val" id="det-min">${fmt(p.minP)}</div>
+        <div class="iva-row">
+          <span class="iva-val" id="det-min-iva">${fmt(p.minP* (1 + IVA))}</span>
+          <span class="iva-badge">c/IVA</span>
+        </div>
+        <div class="pb-note" style="color:var(--muted); margin-top:5px">Tu suelo</div>
+      </div>
+      <div class="price-box price-box-ideal">
+        <div class="pb-tag">Precio Ideal</div>
+        <div class="pb-val" id="det-ideal">${fmt(p.idealP)}</div>
+        <div class="iva-row">
+          <span class="iva-val" id="det-ideal-iva">${fmt(p.idealP* (1 + IVA))}</span>
+          <span class="iva-badge">c/IVA</span>
+        </div>
+        <div class="pb-note" style="margin-top:5px">Margen <span id="det-margin-lbl">${p.margin}</span>%</div>
+      </div>
+    </div>
+
+    <!-- MARGEN -->
+    <div class="margin-section" style="padding:0; margin-bottom:20px">
+      <div class="margin-lbl">📈 Ajustar margen de ganancia</div>
+      <div class="margin-btns" id="det-margin-btns">${marginBtns}</div>
+    </div>
+
+    <!-- EDITAR COMPOSICIÓN -->
+    <div class="det-edit-section">
+      <div class="det-edit-title">✏️ Editar composición del precio</div>
+
+      <div class="det-field-row">
+        <div class="det-field-lbl">🧺 Materiales</div>
+        <input class="det-field-input" type="number" id="det-mat" value="${p.mat}" min="0" oninput="detRecalc(${realId})">
+      </div>
+      <div class="det-field-row">
+        <div class="det-field-lbl">⏰ Tu tiempo</div>
+        <input class="det-field-input" type="number" id="det-labor" value="${p.labor}" min="0" oninput="detRecalc(${realId})">
+      </div>
+      <div class="det-field-row">
+        <div class="det-field-lbl">🏠 Costos fijos</div>
+        <input class="det-field-input" type="number" id="det-struct" value="${p.struct}" min="0" oninput="detRecalc(${realId})">
+      </div>
+
+      <div class="field-label" style="margin-top:14px; margin-bottom:10px">🎨 Carga creativa</div>
+      <div class="det-cr-grid" id="det-cr-grid">${crGrid}</div>
+    </div>
+
+    <!-- SAVE -->
+    <div style="padding-bottom:12px">
+      <button class="btn-det-save" onclick="saveDetProduct(${realId})">💾 Guardar cambios</button>
+      <button class="btn-new-calc" onclick="showView('view-home')" style="width:100%">← Volver al inicio</button>
+    </div>`;
+
+  showView('view-detail');
+}
+
+function detRecalc(id) {
+  const p = S.products.find(p => p.id === id);
+  if (!p) return;
+  const mat    = sanitizeNum(document.getElementById('det-mat').value);
+  const labor  = sanitizeNum(document.getElementById('det-labor').value);
+  const struct = sanitizeNum(document.getElementById('det-struct').value);
+  const cr     = (mat + labor) * (CR_MULT[p.crLvl] || 0.05);
+  const minP   = mat + labor + cr + struct;
+  const idealP = minP * (1 + p.margin / 100);
+  document.getElementById('det-min').textContent       = fmt(minP);
+  document.getElementById('det-min-iva').textContent   = fmt(minP * (1 + IVA));
+  document.getElementById('det-ideal').textContent     = fmt(idealP);
+  document.getElementById('det-ideal-iva').textContent = fmt(idealP * (1 + IVA));
+}
+
+function detSelCr(el, id) {
+  document.querySelectorAll('.det-cr-opt').forEach(o => o.classList.remove('sel'));
+  el.classList.add('sel');
+  const p = S.products.find(p => p.id === id);
+  if (p) { p.crLvl = el.dataset.val; detRecalc(id); }
+}
+
+function detSetMargin(btn, id) {
+  document.querySelectorAll('#det-margin-btns .m-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const p = S.products.find(p => p.id === id);
+  if (!p) return;
+  p.margin = parseInt(btn.dataset.m);
+  document.getElementById('det-margin-lbl').textContent = p.margin;
+  detRecalc(id);
+}
+
+function saveDetProduct(id) {
+  const idx = S.products.findIndex(p => p.id === id);
+  if (idx < 0) return;
+  const p = S.products[idx];
+  const mat    = sanitizeNum(document.getElementById('det-mat').value);
+  const labor  = sanitizeNum(document.getElementById('det-labor').value);
+  const struct = sanitizeNum(document.getElementById('det-struct').value);
+  if (mat + labor + struct <= 0) { toast('Al menos un valor debe ser mayor a 0 🔢'); return; }
+  const cr     = (mat + labor) * (CR_MULT[p.crLvl] || 0.05);
+  const minP   = mat + labor + cr + struct;
+  const idealP = minP * (1 + p.margin / 100);
+  S.products[idx] = { ...p, mat:Math.round(mat), labor:Math.round(labor), struct:Math.round(struct), cr:Math.round(cr), minP:Math.round(minP), idealP:Math.round(idealP) };
+  try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
+  renderHome();
+  toast('✨ ¡Cambios guardados!');
+  setTimeout(() => showView('view-home'), 1400);
+}
+
+// ===================================================
+// BACKUP — EXPORT / IMPORT
+// ===================================================
+function exportData() {
+  if (S.products.length === 0) {
+    toast('⚠️ No hay productos para exportar');
+    return;
+  }
+  const payload = {
+    app: 'PrecioCrea',
+    version: 1,
+    exportDate: new Date().toLocaleDateString('es-CL'),
+    products: S.products
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  const date = new Date().toISOString().slice(0,10);
+  a.href     = url;
+  a.download = `preciocrea-respaldo-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📤 Respaldo descargado');
+}
+
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      // Accept both raw array or wrapped object
+      const imported = Array.isArray(data) ? data : (data.products || []);
+      if (!imported.length) { toast('⚠️ El archivo no tiene productos'); return; }
+
+      // Merge: keep existing, add imported ones that don't already exist (by id)
+      const existingIds = new Set(S.products.map(p => p.id));
+      const newOnes = imported.filter(p => !existingIds.has(p.id));
+      S.products = [...newOnes, ...S.products];
+      try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
+      renderHome();
+      toast(`✅ ${newOnes.length} producto(s) importado(s)`);
+    } catch(err) {
+      toast('❌ Archivo inválido');
+    }
+    input.value = ''; // reset so same file can be re-imported
+  };
+  reader.readAsText(file);
+}
+
+// ===================================================
+// TOOLTIPS & HELP ACCORDION
+// ===================================================
+function toggleHelp(section) {
+  section.classList.toggle('open');
+}
+
+function toggleTip(id) {
+  const box = document.getElementById(id);
+  const open = box.classList.contains('open');
+  document.querySelectorAll('.tip-box').forEach(b => b.classList.remove('open'));
+  if (!open) box.classList.add('open');
+}
+
+// Close tips on outside click
+document.addEventListener('click', e => {
+  if (!e.target.classList.contains('tip-btn')) {
+    document.querySelectorAll('.tip-box').forEach(b => b.classList.remove('open'));
+  }
+});
+
+// ===================================================
+// HELPERS
+// ===================================================
+
+// Returns a safe non-negative finite number, 0 otherwise
+function sanitizeNum(val) {
+  const n = parseFloat(val);
+  if (!isFinite(n) || isNaN(n) || n < 0) return 0;
+  return n;
+}
+
+function fmt(n) {
+  return '$' + Math.round(n).toLocaleString('es-CL');
+}
+
+function fmtShort(n) {
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(1) + 'M';
+  if (n >= 1000)    return '$' + Math.round(n/1000) + 'K';
+  return '$' + Math.round(n);
+}
+
+function getEmoji(name) {
+  const n = (name||'').toLowerCase();
+  if (n.includes('jabón')||n.includes('jabon')||n.includes('soap')) return '🧼';
+  if (n.includes('aro')||n.includes('arete')||n.includes('earring')) return '💎';
+  if (n.includes('anillo')||n.includes('ring')) return '💍';
+  if (n.includes('vela')||n.includes('candle')) return '🕯️';
+  if (n.includes('crochet')||n.includes('tejido')||n.includes('amigurumi')) return '🧶';
+  if (n.includes('resina')||n.includes('resin')) return '✨';
+  if (n.includes('crema')||n.includes('cosmet')||n.includes('perfume')||n.includes('aceite')) return '🌿';
+  if (n.includes('bolso')||n.includes('cartera')||n.includes('bag')) return '👜';
+  if (n.includes('pulsera')||n.includes('collar')) return '📿';
+  if (n.includes('taza')||n.includes('mug')) return '☕';
+  if (n.includes('cuadro')||n.includes('pintura')) return '🖼️';
+  return '🎨';
+}
+
+function esc(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ===================================================
+// PWA
+// ===================================================
+const _iconB64 = 'data:image/png;base64,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';
+const mf = {
+  name: 'PrecioCrea',
+  short_name: 'PrecioCrea ✨',
+  start_url: '.',
+  display: 'standalone',
+  background_color: '#FFF6EF',
+  theme_color: '#FF6B6B',
+  icons: [
+    { src: _iconB64, sizes: '192x192', type: 'image/png' },
+    { src: _iconB64, sizes: '512x512', type: 'image/png' }
+  ]
+};
+const mBlob = new Blob([JSON.stringify(mf)], {type:'application/json'});
+const mLink = document.createElement('link');
+mLink.rel = 'manifest';
+mLink.href = URL.createObjectURL(mBlob);
+document.head.appendChild(mLink);
+
+if ('serviceWorker' in navigator) {
+  const sw = `const C='pc-v3'; self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['.','./css/styles.css','./js/app.js'])))); self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
+}
+

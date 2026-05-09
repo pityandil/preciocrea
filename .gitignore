@@ -1,0 +1,19 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# Claude Code
+.claude/
+
+# Archivos temporales y respaldos locales
+_archivo/
+*.tmp
+*.bak
+
+# Archivos de respaldo exportados por la app (no van en git)
+preciocrea-respaldo-*.json

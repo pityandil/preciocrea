@@ -1,0 +1,661 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="PrecioCrea">
+<meta name="theme-color" content="#FF6B6B">
+<title>PrecioCrea ✨</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;0,900;1,400&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+<div class="bg-blobs"><span></span><span></span><span></span></div>
+
+<div class="app">
+
+  <!-- ==================== HOME ==================== -->
+  <div id="view-home" class="view active">
+    <div class="home-top">
+      <div class="home-logo">
+        <div class="logo-text">
+          <span class="p1">precio</span><span class="p2">crea</span><span class="p3"> ✨</span>
+        </div>
+        <div class="logo-badge">BETA</div>
+        <div class="logo-actions">
+          <button class="btn-backup-icon" onclick="showView('view-backup')" title="Respaldo de datos">🛡️</button>
+          <button class="btn-help" onclick="showView('view-help')" title="Guía de ayuda">?</button>
+        </div>
+      </div>
+
+      <div class="home-hero-card">
+        <div class="hero-greeting">¡Hola, creadora! 👋</div>
+        <div class="hero-title">Cobra lo que<br>realmente mereces</div>
+        <div class="hero-desc">Calcula el precio justo de tus creaciones usando los 4 pilares del precio profesional.</div>
+        <button class="btn-cta" onclick="startCalc()">
+          <span class="cta-icon">✨</span> Calcular precio
+        </button>
+      </div>
+    </div>
+
+    <!-- SPOTIFY PODCAST -->
+    <a class="spotify-card" href="https://open.spotify.com/episode/3fxJsZH38sC7rz4rpqnvej?si=HseuTv3GQBa1lPHREzj6oA" target="_blank" rel="noopener">
+      <div class="spotify-icon">
+        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 0 1-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 1 1-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 0 1 .207.857zm1.223-2.722a.78.78 0 0 1-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 0 1-.973-.519.781.781 0 0 1 .52-.972c3.632-1.102 8.147-.568 11.233 1.329a.78.78 0 0 1 .257 1.071zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.937.937 0 1 1-.543-1.794c3.532-1.072 9.404-.865 13.115 1.338a.937.937 0 0 1-.955 1.613z"/>
+        </svg>
+      </div>
+      <div class="spotify-text">
+        <div class="spotify-label">🎙️ Podcast recomendado</div>
+        <div class="spotify-title">Cobra lo que realmente vale tu trabajo</div>
+        <div class="spotify-sub">Escuchar en Spotify →</div>
+      </div>
+    </a>
+
+    <div class="stats-row" id="stats-row" style="display:none">
+      <div class="stat-pill">
+        <div class="stat-val" id="stat-count">0</div>
+        <div class="stat-lbl">Productos guardados</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-val" id="stat-avg">$0</div>
+        <div class="stat-lbl">Precio promedio</div>
+      </div>
+    </div>
+
+    <div class="products-section-title" id="list-title" style="display:none">Tus productos 🎨</div>
+    <div class="products-list" id="products-list">
+      <div class="empty-state">
+        <div class="empty-icon">🌱</div>
+        <p>Aún no tienes productos guardados.<br>¡Calcula el precio de tu primera creación!</p>
+      </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="app-footer">
+      <div class="footer-love">
+        Creada con amor por <a href="https://viviloaiza.cl" target="_blank">viviLoaiza.cl</a><br>
+        para todas las emprendedoras que la necesiten 💛<br>
+        <span style="font-size:11px; color:var(--muted)">Queda prohibida su venta o distribución comercial.</span>
+      </div>
+      <div class="footer-copy">© viviLoaiza.cl</div>
+      <div style="font-size:10px; color:var(--muted); text-align:center; margin-top:6px; line-height:1.5; padding: 0 8px">
+        El logotipo de Spotify es marca registrada de Spotify AB y se utiliza únicamente con fines referenciales.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ==================== CALCULATOR ==================== -->
+  <div id="view-calc" class="view">
+    <div class="calc-header">
+      <button class="btn-back" onclick="navBack()">←</button>
+      <div class="progress-wrap">
+        <div class="progress-label" id="prog-label">Paso 1 de 4</div>
+        <div class="progress-track" id="prog-track">
+          <div class="pdot active" id="pd1"></div>
+          <div class="pdot" id="pd2"></div>
+          <div class="pdot" id="pd3"></div>
+          <div class="pdot" id="pd4"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 1 — MATERIALES -->
+    <div id="step-1" class="calc-step active">
+      <div class="step-chip" style="background:var(--coral-light); color:var(--coral);">🧺 Paso 1</div>
+      <div class="step-title">Materiales</div>
+      <p class="step-desc">Todo lo que compraste para crear este producto. Desde la materia prima hasta el empaque.</p>
+
+      <div class="field-group">
+        <div class="field-label">
+          Nombre del producto
+          <button class="tip-btn" style="background:var(--coral)" onclick="toggleTip('t-name')">?</button>
+        </div>
+        <div class="tip-box" id="t-name">Dale un nombre a tu creación para identificarla en tu lista. <em>Ej: "Jabón de lavanda 100g"</em> 🏷️</div>
+        <input class="field-input" type="text" id="inp-name" placeholder="ej: Jabón de lavanda 100g" style="--step-accent:var(--coral)">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">
+          Lista de ingredientes / materiales
+          <button class="tip-btn" style="background:var(--coral)" onclick="toggleTip('t-mat')">?</button>
+        </div>
+        <div class="tip-box" id="t-mat">
+          Incluye <strong>todo lo que tiene costo</strong>: materia prima, insumos de proceso (guantes, moldes desechables), packaging y etiquetas.<br><br>
+          Si compraste un paquete grande, calcula solo la <em>parte que usaste</em>. Divide el precio total entre la cantidad total y multiplica por lo que gastaste. 📦
+        </div>
+        <div class="materials-list" id="mat-list">
+          <div class="mat-row">
+            <input class="field-input mat-name" type="text" placeholder="ej: Aceite de coco" style="--step-accent:var(--coral)">
+            <input class="field-input mat-cost" type="number" placeholder="$" min="0" oninput="calcMatTotal()" style="--step-accent:var(--coral)">
+            <button class="btn-rem" onclick="remMat(this)">✕</button>
+          </div>
+        </div>
+        <button class="btn-add-mat" onclick="addMat()">＋ Agregar material</button>
+        <div class="mat-total-row">
+          <span class="mat-total-lbl">📦 Total materiales</span>
+          <span class="mat-total-val" id="mat-total">$0</span>
+        </div>
+      </div>
+
+      <button class="btn-next" style="background:linear-gradient(135deg,#FF6B6B,#FF9A6C); box-shadow:0 8px 24px rgba(255,107,107,0.4)" onclick="goStep(2)">
+        Mi tiempo →
+      </button>
+    </div>
+
+    <!-- STEP 2 — TIEMPO -->
+    <div id="step-2" class="calc-step">
+      <div class="step-chip" style="background:var(--blue-light); color:var(--blue);">⏰ Paso 2</div>
+      <div class="step-title">Tu Tiempo</div>
+      <p class="step-desc">Tu tiempo es el recurso más valioso que tienes. Aquí lo convertimos en un número justo.</p>
+
+      <div class="field-group">
+        <div class="field-label">
+          Horas trabajadas
+          <button class="tip-btn" style="background:var(--blue)" onclick="toggleTip('t-hours')">?</button>
+        </div>
+        <div class="tip-box" id="t-hours">
+          Cuenta <strong>todo el tiempo</strong>: preparación, producción, empaquetado y control de calidad. Si tardas 30 min en preparar y 2 horas haciendo el producto, escribe <em>2.5</em>. ⏱️
+        </div>
+        <input class="field-input" type="number" id="inp-hours" placeholder="ej: 2.5" min="0" step="0.5" oninput="updateLaborPreview()" style="--step-accent:var(--blue)">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">
+          Valor de tu hora ($)
+          <button class="tip-btn" style="background:var(--blue)" onclick="toggleTip('t-rate')">?</button>
+        </div>
+        <div class="tip-box" id="t-rate">
+          <strong>¿Cómo calcularlo?</strong><br>
+          Piensa cuánto necesitas ganar al mes. Divídelo entre tus horas disponibles.<br><br>
+          <em>Ejemplo: $600.000/mes ÷ 80 horas = $7.500/hora</em><br><br>
+          <strong>Regla de oro:</strong> Nunca cobres menos del sueldo mínimo por hora (~$1.800/hr en Chile). <em>¡Tú vales mucho más!</em> 💙
+        </div>
+        <input class="field-input" type="number" id="inp-rate" placeholder="ej: 8000" min="0" step="500" oninput="updateLaborPreview()" style="--step-accent:var(--blue)">
+        <div class="labor-preview" id="labor-preview">
+          💙 Costo de mano de obra: <strong id="labor-val">$0</strong>
+        </div>
+      </div>
+
+      <button class="btn-next" style="background:linear-gradient(135deg,#4D96FF,#7AB8FF); box-shadow:0 8px 24px rgba(77,150,255,0.4)" onclick="goStep(3)">
+        Creatividad →
+      </button>
+    </div>
+
+    <!-- STEP 3 — CREATIVIDAD -->
+    <div id="step-3" class="calc-step">
+      <div class="step-chip" style="background:var(--purple-light); color:var(--purple);">🎨 Paso 3</div>
+      <div class="step-title">Carga Mental y Creatividad</div>
+      <p class="step-desc">El diseño, la originalidad y el esfuerzo invisible también tienen un precio.</p>
+
+      <div class="field-label" style="margin-bottom:14px">
+        ¿Qué nivel de creatividad requirió?
+        <button class="tip-btn" style="background:var(--purple)" onclick="toggleTip('t-cr')">?</button>
+      </div>
+      <div class="tip-box" id="t-cr" style="margin-bottom:16px">
+        Esto es el <strong>"trabajo invisible"</strong>: el tiempo que dedicaste a probar ideas fallidas, aprender técnicas, investigar tendencias y diseñar desde cero.<br><br>
+        También incluye la <em>carga mental</em>: coordinar proveedores, responder mensajes a deshora, mantener la inspiración bajo presión. <strong>¡Todo eso tiene un precio!</strong> 🧠✨
+      </div>
+
+      <div class="creativity-grid" id="cr-grid">
+        <div class="cr-option sel" data-val="facil" onclick="selCr(this)">
+          <div class="cr-emoji">😊</div>
+          <div class="cr-name">Fácil</div>
+          <div class="cr-pct">+5%</div>
+        </div>
+        <div class="cr-option" data-val="moderado" onclick="selCr(this)">
+          <div class="cr-emoji">🤔</div>
+          <div class="cr-name">Moderado</div>
+          <div class="cr-pct">+15%</div>
+        </div>
+        <div class="cr-option" data-val="intenso" onclick="selCr(this)">
+          <div class="cr-emoji">🔥</div>
+          <div class="cr-name">Intenso</div>
+          <div class="cr-pct">+25%</div>
+        </div>
+        <div class="cr-option" data-val="obra" onclick="selCr(this)">
+          <div class="cr-emoji">🏆</div>
+          <div class="cr-name">Obra de Autor</div>
+          <div class="cr-pct">+40%</div>
+        </div>
+      </div>
+
+      <button class="btn-next" style="background:linear-gradient(135deg,#C77DFF,#DFA8FF); box-shadow:0 8px 24px rgba(199,125,255,0.4)" onclick="goStep(4)">
+        Costos fijos →
+      </button>
+    </div>
+
+    <!-- STEP 4 — COSTOS ESTRUCTURALES -->
+    <div id="step-4" class="calc-step">
+      <div class="step-chip" style="background:var(--green-light); color:var(--green);">🏠 Paso 4</div>
+      <div class="step-title">Costos Estructurales</div>
+      <p class="step-desc">Lo que cuesta tener el negocio funcionando, aunque hoy no vendas nada.</p>
+
+      <div class="field-group">
+        <div class="field-label">
+          Gastos fijos mensuales ($)
+          <button class="tip-btn" style="background:var(--green)" onclick="toggleTip('t-fixed')">?</button>
+        </div>
+        <div class="tip-box" id="t-fixed">
+          Suma todo lo que pagas mensualmente: <br>
+          • Arriendo del taller o parte del arriendo de tu casa <br>
+          • Electricidad, internet (proporcional al negocio) <br>
+          • Publicidad en redes sociales <br>
+          • Página web, Shopify, Etsy, etc. <br>
+          • Amortización de herramientas (su desgaste mensual) <br><br>
+          <em>Tip: Si usas una habitación de tu casa, considera el 15-20% del arriendo. 🏠</em>
+        </div>
+        <input class="field-input" type="number" id="inp-fixed" placeholder="ej: 80000" min="0" step="1000" style="--step-accent:var(--green)">
+      </div>
+
+      <div class="field-group">
+        <div class="field-label">
+          Unidades que produces al mes
+          <button class="tip-btn" style="background:var(--green)" onclick="toggleTip('t-units')">?</button>
+        </div>
+        <div class="tip-box" id="t-units">
+          Este número reparte tus gastos fijos entre todos tus productos. Si fabricas 20 jabones y 10 aros, escribe <em>30</em>. Así cada producto paga su parte justa del negocio. 📊
+        </div>
+        <input class="field-input" type="number" id="inp-units" placeholder="ej: 30" min="1" step="1" value="20" style="--step-accent:var(--green)">
+      </div>
+
+      <button class="btn-next" style="background:linear-gradient(135deg,#6BCB77,#43D05A); box-shadow:0 8px 24px rgba(107,203,119,0.4)" onclick="showResults()">
+        ¡Ver mi precio! 🎉
+      </button>
+    </div>
+  </div>
+
+  <!-- ==================== RESULTS ==================== -->
+  <div id="view-results" class="view">
+    <div class="section-header">
+      <button class="btn-back" onclick="showView('view-calc')">←</button>
+      <div class="section-header-title">Tu precio justo ✨</div>
+    </div>
+
+    <div class="results-confetti" id="confetti-emoji">🎉</div>
+    <div class="result-name" id="res-name">Producto</div>
+    <div class="result-sub">Calculado con los 4 pilares del precio justo</div>
+
+    <div class="price-duo">
+      <div class="price-box price-box-floor">
+        <div class="pb-tag">Precio Mínimo</div>
+        <div class="pb-val" id="res-min">$0</div>
+        <div class="iva-row">
+          <span class="iva-val" id="res-min-iva">$0</span>
+          <span class="iva-badge">c/IVA</span>
+        </div>
+        <div class="pb-note" style="color:var(--muted); margin-top:5px">Tu suelo — nunca vendas bajo este valor</div>
+      </div>
+      <div class="price-box price-box-ideal">
+        <div class="pb-tag">Precio Ideal</div>
+        <div class="pb-val" id="res-ideal">$0</div>
+        <div class="iva-row">
+          <span class="iva-val" id="res-ideal-iva">$0</span>
+          <span class="iva-badge">c/IVA</span>
+        </div>
+        <div class="pb-note" style="margin-top:5px">Para crecer y reinvertir 🚀</div>
+      </div>
+    </div>
+
+    <div class="margin-section">
+      <div class="margin-lbl">📈 Ajustar margen de ganancia</div>
+      <div class="margin-btns">
+        <button class="m-btn" data-m="30" onclick="setMargin(this)">30%<br><small>Básico</small></button>
+        <button class="m-btn active" data-m="50" onclick="setMargin(this)">50%<br><small>Sugerido</small></button>
+        <button class="m-btn" data-m="80" onclick="setMargin(this)">80%<br><small>Autor</small></button>
+        <button class="m-btn" data-m="120" onclick="setMargin(this)">120%<br><small>Premium</small></button>
+      </div>
+    </div>
+
+    <div class="breakdown-section">
+      <div class="breakdown-title">¿Cómo se compone tu precio?</div>
+      <div class="bar-items" id="bar-items"></div>
+    </div>
+
+    <div class="wisdom-card">
+      <div class="wisdom-hd">💡 Para recordar</div>
+      <div class="wisdom-txt" id="wisdom-txt">Cargando...</div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-save" onclick="saveProduct()">💾 Guardar producto</button>
+      <button class="btn-new-calc" onclick="startCalc()">＋ Calcular otro producto</button>
+    </div>
+  </div>
+
+  <!-- ==================== DETAIL ==================== -->
+  <div id="view-detail" class="view">
+    <div class="section-header">
+      <button class="btn-back" onclick="showView('view-home')">←</button>
+      <div class="section-header-title" id="det-title">Detalle</div>
+    </div>
+    <div class="detail-body" id="det-body"></div>
+  </div>
+
+  <!-- ==================== BACKUP ==================== -->
+  <div id="view-backup" class="view">
+    <div class="section-header" style="padding-top:22px">
+      <button class="btn-back" onclick="showView('view-home')">←</button>
+      <div class="section-header-title">Respaldo de datos 🛡️</div>
+    </div>
+
+    <div style="padding:24px 22px">
+
+      <!-- Hero -->
+      <div style="background:linear-gradient(135deg,var(--green),#43C850); border-radius:var(--radius); padding:24px 20px; color:white; margin-bottom:24px; box-shadow:0 8px 28px rgba(107,203,119,0.38); position:relative; overflow:hidden">
+        <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;background:rgba(255,255,255,0.1);border-radius:50%;pointer-events:none"></div>
+        <div style="font-size:38px;margin-bottom:10px">🛡️</div>
+        <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:900;margin-bottom:8px;line-height:1.2">Protege tu trabajo</div>
+        <div style="font-size:13.5px;opacity:0.92;line-height:1.6">Tus productos se guardan en este dispositivo. Si limpias el caché del navegador los perderías. <strong>Exporta regularmente para estar segura.</strong></div>
+      </div>
+
+      <!-- Export -->
+      <div style="background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);padding:20px 18px;margin-bottom:14px;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--blue-light);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📤</div>
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">Exportar productos</div>
+            <div style="font-size:12px;color:var(--muted);font-weight:600">Descarga un archivo de respaldo</div>
+          </div>
+        </div>
+        <p style="font-size:13.5px;line-height:1.65;color:var(--text);margin-bottom:14px">Descarga un archivo <strong>.json</strong> con todos tus productos. Guárdalo en Google Drive, enviátelo por WhatsApp o guárdalo en tu computador.</p>
+        <button class="btn-save" style="margin-bottom:0" onclick="exportData()">📤 Descargar respaldo</button>
+      </div>
+
+      <!-- Import -->
+      <div style="background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);padding:20px 18px;margin-bottom:24px;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--purple-light);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">📥</div>
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">Importar respaldo</div>
+            <div style="font-size:12px;color:var(--muted);font-weight:600">Restaura desde un archivo anterior</div>
+          </div>
+        </div>
+        <p style="font-size:13.5px;line-height:1.65;color:var(--text);margin-bottom:14px">Si cambiaste de dispositivo o limpiaste el caché, selecciona el archivo <strong>.json</strong> que exportaste antes. Los productos nuevos se agregarán sin eliminar los actuales.</p>
+        <button class="btn-save" style="background:linear-gradient(135deg,var(--purple),#DFA8FF);box-shadow:0 8px 24px rgba(199,125,255,0.4);margin-bottom:0" onclick="document.getElementById('inp-import').click()">📥 Seleccionar archivo</button>
+        <input type="file" id="inp-import" accept=".json" onchange="importData(this)" style="display:none">
+      </div>
+
+      <!-- Tip -->
+      <div style="background:var(--yellow-light);border-left:4px solid var(--yellow);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:14px 16px">
+        <div style="font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:0.5px;color:#7A5000;margin-bottom:6px">💡 Tip de respaldo</div>
+        <div style="font-size:13.5px;line-height:1.65;color:var(--text)">Cada vez que guardes un producto nuevo, exporta y <strong>reemplaza el archivo anterior</strong> en una carpeta de Google Drive. Son 30 segundos que protegen meses de trabajo.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== HELP ==================== -->
+  <div id="view-help" class="view">
+
+    <div class="section-header" style="padding-top:22px">
+      <button class="btn-back" onclick="showView('view-home')">←</button>
+      <div class="section-header-title">Guía de PrecioCrea 📖</div>
+    </div>
+
+    <div class="help-hero">
+      <div class="help-hero-emoji">💡</div>
+      <div class="help-hero-title">Cobra lo que<br>realmente vales</div>
+      <div class="help-hero-sub">Esta guía te explica por qué cada número importa y cómo pensar en el precio de tus creaciones de forma profesional.</div>
+    </div>
+
+    <div class="help-body">
+
+      <!-- POR QUÉ IMPORTA -->
+      <div class="help-section open">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:var(--coral-light)">💜</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">¿Por qué cuesta tanto poner precio?</div>
+            <div class="help-section-hd-sub">El origen del problema</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <p class="help-p">A muchas mujeres emprendedoras les cuesta cobrar lo justo, y no es porque no sepan matemáticas. Es porque culturalmente se nos enseñó que el trabajo hecho con amor no debería tener precio, que "cobrar mucho" aleja clientes, y que si disfrutamos lo que hacemos, casi que "no cuenta" como trabajo real.</p>
+          <p class="help-p">A esto se suma el <strong>síndrome de la impostora</strong>: esa vocecita que dice "¿quién soy yo para cobrar tanto?" o "mis cosas no son tan especiales". En Chile y Latinoamérica este patrón es muy común entre creadoras de joyería, cosméticos, crochet y arte en resina.</p>
+          <div class="help-warning">
+            <div class="help-warning-title">⚠️ El precio bajo no te protege</div>
+            Muchas bajan precios pensando que así no habrá reclamos. Pero los clientes que llegan solo por el precio bajo suelen ser los más exigentes y los menos fieles. <strong>Cobrar bien filtra a quienes de verdad valoran tu arte.</strong>
+          </div>
+          <p class="help-p">El precio no es solo un número: es la declaración de cuánto vales. Si tú no le pones precio justo a tu trabajo, nadie más lo hará por ti.</p>
+        </div>
+      </div>
+
+      <!-- MATERIALES -->
+      <div class="help-section">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:var(--coral-light)">🧺</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">Paso 1 · Materiales</div>
+            <div class="help-section-hd-sub">Todo lo que se convierte en producto</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <p class="help-p">Aquí van <strong>todos los costos que tocan el producto</strong>: desde las materias primas hasta la etiqueta. El error más común es solo calcular el ingrediente principal y olvidar el resto.</p>
+          <p class="help-p">¿Qué incluir? Materias primas, insumos de proceso (guantes, moldes desechables, papel), packaging (caja, bolsa, papel seda, tarjeta), y el envío de los materiales que compraste.</p>
+          <div class="help-tip">
+            <div class="help-tip-title">💡 Cómo calcular si compraste en cantidad</div>
+            Si compraste 1 kg de resina a $18.000 y usaste 80g en el producto, el costo es: $18.000 ÷ 1000 × 80 = <strong>$1.440</strong>. No anotes el kilo completo.
+          </div>
+          <div class="help-example">
+            <div class="help-example-title">🧼 Ejemplo · Jabón artesanal (lote de 10)</div>
+            Aceite de oliva: $6.000 · Aceite de coco: $3.500 · Manteca karité: $2.500 · Aceites esenciales: $2.800 · Soda cáustica: $900 · Packaging x10: $4.000 · Envío insumos: $2.000<br>
+            <strong>Total lote: $21.700 → Por jabón: $2.170</strong>
+          </div>
+          <div class="help-example">
+            <div class="help-example-title">💎 Ejemplo · Aros de resina</div>
+            Resina (porción): $1.200 · Flores prensadas: $800 · Ganchos plata 925 x2: $1.600 · Caja packaging: $700<br>
+            <strong>Total materiales: $4.300</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIEMPO -->
+      <div class="help-section">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:var(--blue-light)">⏰</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">Paso 2 · Tu Tiempo</div>
+            <div class="help-section-hd-sub">El recurso que no se puede recuperar</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <p class="help-p">Tu tiempo es el pilar más importante y el más olvidado. Cuando no te lo cobras, estás <strong>trabajando gratis para tu propio negocio</strong>. Si lo pensamos así de simple: si una empleada de tienda gana $1.800/hora y tú cobras menos que eso, estás perdiendo dinero.</p>
+          <p class="help-p"><strong>¿Cómo fijar tu valor hora?</strong> Piensa cuánto quieres ganar al mes. Divídelo entre las horas disponibles para el negocio. Eso es tu valor hora mínimo.</p>
+          <div class="help-example">
+            <div class="help-example-title">🔢 Ejemplo de cálculo</div>
+            Quiero ganar $500.000 al mes. Tengo 60 horas disponibles para el negocio.<br>
+            $500.000 ÷ 60 = <strong>$8.333/hora</strong>. Ese es tu piso.
+          </div>
+          <div class="help-warning">
+            <div class="help-warning-title">⚠️ Cuenta TODO el tiempo</div>
+            No solo el tiempo de hacer el producto. También: preparar materiales, limpiar el espacio, empacar, fotografiar para redes y responder mensajes. Si tardas 3h en hacer el jabón pero 1h más en todo lo demás, son <strong>4 horas</strong>.
+          </div>
+          <div class="help-example">
+            <div class="help-example-title">🧶 Ejemplo · Amigurumi de crochet</div>
+            Tejido: 6h · Relleno y armado: 1h · Empaque y foto: 30min = 7.5h total<br>
+            Valor hora: $8.000 → <strong>Costo mano de obra: $60.000</strong><br>
+            Muchas cobran $15.000. ¡Están perdiendo $45.000 en solo mano de obra!
+          </div>
+        </div>
+      </div>
+
+      <!-- CREATIVIDAD -->
+      <div class="help-section">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:var(--purple-light)">🎨</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">Paso 3 · Carga Mental y Creatividad</div>
+            <div class="help-section-hd-sub">El trabajo invisible que también tiene precio</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <p class="help-p">Este es el pilar más difícil de ver pero uno de los más importantes. La creatividad, el diseño y el esfuerzo mental tienen valor económico real. Los expertos lo llaman <strong>"trabajo invisible"</strong> o <strong>"valor creativo"</strong>.</p>
+          <p class="help-p">¿Qué incluye? El tiempo que pasaste probando diseños que no funcionaron, investigando tendencias, aprendiendo técnicas nuevas, manteniendo la inspiración y coordinando todo el negocio mentalmente.</p>
+          <div class="help-tip">
+            <div class="help-tip-title">💡 ¿Qué nivel elegir?</div>
+            <strong>Fácil (+5%):</strong> Producto de diseño simple y repetible. Ej: jabón rectangular básico.<br>
+            <strong>Moderado (+15%):</strong> Requiere técnica y algo de diseño. Ej: vela con fragancia y decoración.<br>
+            <strong>Intenso (+25%):</strong> Alta técnica, mucho ensayo y error. Ej: aros de resina con inclusiones botánicas.<br>
+            <strong>Obra de autor (+40%):</strong> Pieza única, diseño propio, alto nivel artístico. Ej: joya de plata diseñada desde cero.
+          </div>
+          <div class="help-example">
+            <div class="help-example-title">✨ Ejemplo · Anillo de resina único</div>
+            Materiales + tiempo base = $22.000<br>
+            Nivel "Intenso" (+25%) = $22.000 × 0.25 = $5.500 extra<br>
+            <strong>Con creatividad: $27.500</strong> (vs $22.000 sin contarla)
+          </div>
+        </div>
+      </div>
+
+      <!-- COSTOS ESTRUCTURALES -->
+      <div class="help-section">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:var(--green-light)">🏠</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">Paso 4 · Costos Estructurales</div>
+            <div class="help-section-hd-sub">Lo que cuesta existir como negocio</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <p class="help-p">Son los <strong>"fantasmas" del presupuesto</strong>: existen aunque hoy no vendas nada. Si no los incluyes en el precio, los estás pagando de tu bolsillo sin darte cuenta.</p>
+          <p class="help-p">¿Qué incluir? Arriendo del taller (o % del arriendo de tu casa), electricidad e internet, publicidad en redes, página web, plataformas de venta (Etsy, Shopify), y la amortización de herramientas.</p>
+          <div class="help-tip">
+            <div class="help-tip-title">💡 ¿Cómo calcular la amortización?</div>
+            Si compraste una selladora a $80.000 y calcula que durará 800 usos, cada producto debe pagar $80.000 ÷ 800 = <strong>$100</strong>. Así cuando se rompa, ya tienes el dinero para reponerla.
+          </div>
+          <div class="help-example">
+            <div class="help-example-title">📊 Ejemplo de costos fijos mensuales</div>
+            Internet (20% de uso negocio): $4.000 · Publicidad Instagram: $15.000 · Dominio web: $2.500 · Amortización herramientas: $5.000 · Parte del arriendo taller: $20.000<br>
+            <strong>Total mensual: $46.500</strong><br>
+            Si produces 30 unidades/mes → <strong>$1.550 por producto</strong>
+          </div>
+          <div class="help-warning">
+            <div class="help-warning-title">⚠️ El error del "gastos hormiga"</div>
+            "Es solo una bolsita de empaque"… "es solo un poco de cinta"… Al mes, esos pequeños gastos pueden comerse el 10-15% de tu ganancia. Registra todo.
+          </div>
+        </div>
+      </div>
+
+      <!-- PRECIO MÍNIMO VS IDEAL -->
+      <div class="help-section">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:var(--yellow-light)">📊</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">Precio mínimo vs. Precio ideal</div>
+            <div class="help-section-hd-sub">La diferencia entre sobrevivir y crecer</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <p class="help-p">El <strong>precio mínimo</strong> es la suma de todos tus costos. Es el punto cero: si cobras menos que esto, estás perdiendo dinero con cada venta. Úsalo solo como referencia interna, nunca como precio de catálogo.</p>
+          <p class="help-p">El <strong>precio ideal</strong> incluye un margen de ganancia. Ese margen no es tu sueldo (ya está en el pilar 2), sino el dinero que se queda en el negocio para reinvertir, crecer, comprar mejores herramientas o tener un fondo de emergencia.</p>
+          <div class="help-example">
+            <div class="help-example-title">🧼 Ejemplo con el jabón</div>
+            Costo mínimo por jabón: $4.800<br>
+            Con margen 30%: $4.800 × 1.30 = <strong>$6.240</strong> (básico)<br>
+            Con margen 50%: $4.800 × 1.50 = <strong>$7.200</strong> (sugerido)<br>
+            Con margen 80%: $4.800 × 1.80 = <strong>$8.640</strong> (para reinversión fuerte)
+          </div>
+          <div class="help-tip">
+            <div class="help-tip-title">💡 ¿Qué margen elegir?</div>
+            <strong>30%</strong> si produces en volumen y necesitas ser competitiva.<br>
+            <strong>50%</strong> para la mayoría de los productos creativos.<br>
+            <strong>80-120%</strong> para piezas únicas, joyería fina o productos de autor.<br>
+            Mientras más especial y exclusivo, mayor puede ser el margen.
+          </div>
+          <p class="help-p">Y recuerda: el <strong>precio con IVA (19%)</strong> es lo que legalmente debes cobrar si emites boleta. Siempre calcula primero el neto y luego agrega el IVA al comunicar el precio final al cliente.</p>
+        </div>
+      </div>
+
+      <!-- ERRORES COMUNES -->
+      <div class="help-section">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:#FFE8E8">🚫</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">Errores que drenan tu negocio</div>
+            <div class="help-section-hd-sub">Aprende de lo que otras ya vivieron</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <div class="help-warning">
+            <div class="help-warning-title">❌ Copiar el precio de la competencia</div>
+            Tu vecina puede tener costos distintos, comprar insumos hace años o simplemente estar perdiendo dinero sin saberlo. Copiar su precio es heredar su problema. Confía en tus propios números.
+          </div>
+          <div class="help-warning">
+            <div class="help-warning-title">❌ "Me pago con lo que queda"</div>
+            Si no hay un sueldo fijo en tus costos, nunca sabrás si el negocio es rentable. Págate primero, aunque sea un monto pequeño al inicio. Eso te transforma de "persona con hobby" a dueña de negocio.
+          </div>
+          <div class="help-warning">
+            <div class="help-warning-title">❌ Bajar precios para no perder clientes</div>
+            El cliente que se va porque subiste $500 no era tu cliente ideal. Un precio bajo atrae buscadores de oferta, no personas que valoran tu arte. Subir precios bien comunicados casi nunca aleja a los buenos clientes.
+          </div>
+          <div class="help-warning">
+            <div class="help-warning-title">❌ No considerar el tiempo de producción</div>
+            Cada hora no cobrada es dinero regalado. El crochet, el bordado y la joyería son rubros donde el tiempo es el costo más grande. Ignorarlo genera resentimiento y agotamiento.
+          </div>
+        </div>
+      </div>
+
+      <!-- MANTRAS -->
+      <div class="help-section">
+        <div class="help-section-hd" onclick="toggleHelp(this.closest('.help-section'))">
+          <div class="help-section-hd-icon" style="background:var(--purple-light)">🌟</div>
+          <div class="help-section-hd-text">
+            <div class="help-section-hd-title">Lo que toda creadora debe recordar</div>
+            <div class="help-section-hd-sub">Para el corazón y para la cabeza</div>
+          </div>
+          <div class="help-chevron">▾</div>
+        </div>
+        <div class="help-section-body">
+          <div class="help-mantras">
+            <div class="help-mantra">💜 <strong>Tu creatividad es un activo, no un regalo.</strong> El tiempo que pasas soñando y diseñando tiene valor económico real. Si tú no le pones precio, nadie más lo hará.</div>
+            <div class="help-mantra">🎯 <strong>El precio es un filtro de clientes.</strong> Cobrar lo justo te conecta con personas que atesorarán tu trabajo por siempre.</div>
+            <div class="help-mantra">🔢 <strong>Los números no tienen sentimientos.</strong> Si la tabla dice $15.000, no lo bajes a $10.000 por miedo. Confía en tus cálculos.</div>
+            <div class="help-mantra">💰 <strong>Tu sueldo es un costo fijo, no un excedente.</strong> El negocio debe poder pagarte antes de contar ganancias.</div>
+            <div class="help-mantra">🌱 <strong>Pequeños pasos, grandes resultados.</strong> Una planilla de costos básica es mejor que el caos. La constancia vence a la perfección.</div>
+            <div class="help-mantra">👑 <strong>Eres la gerente de tu talento.</strong> Trata tu emprendimiento con el respeto que le darías a una gran empresa.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; padding: 20px 16px 4px">
+        <p style="font-size:13px; color:var(--muted); margin-bottom:10px">¿Quieres profundizar? Escucha el episodio completo:</p>
+        <a class="spotify-inline" href="https://open.spotify.com/episode/3fxJsZH38sC7rz4rpqnvej?si=HseuTv3GQBa1lPHREzj6oA" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 0 1-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 1 1-.277-1.215c3.809-.87 7.077-.496 9.712 1.115a.623.623 0 0 1 .207.857zm1.223-2.722a.78.78 0 0 1-1.072.257c-2.687-1.652-6.785-2.131-9.965-1.166a.78.78 0 0 1-.973-.519.781.781 0 0 1 .52-.972c3.632-1.102 8.147-.568 11.233 1.329a.78.78 0 0 1 .257 1.071zm.105-2.835C14.692 8.95 9.375 8.775 6.297 9.71a.937.937 0 1 1-.543-1.794c3.532-1.072 9.404-.865 13.115 1.338a.937.937 0 0 1-.955 1.613z"/>
+          </svg>
+          Cobra lo que realmente vale tu trabajo
+        </a>
+      </div>
+
+      <div style="text-align:center; padding: 16px 0 8px">
+        <button class="btn-cta" onclick="showView('view-home')" style="background: linear-gradient(135deg, var(--coral), var(--purple)); color:white; box-shadow:0 8px 24px rgba(199,125,255,0.35)">
+          ✨ ¡Empezar a calcular!
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- .app -->
+
+<div class="toast" id="toast">✅ Guardado</div>
+
+<script>
+<script src="js/app.js"></script>
+</body>
+</html>
