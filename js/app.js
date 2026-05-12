@@ -738,29 +738,40 @@ function confirmDialog({ icon = '⚠️', title = '¿Confirmar?', message = '', 
 }
 
 // ===================================================
-// PWA
+// PWA — Service Worker
 // ===================================================
-const _iconB64 = 'data:image/png;base64,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';
-const mf = {
-  name: 'PrecioCrea',
-  short_name: 'PrecioCrea ✨',
-  start_url: '.',
-  display: 'standalone',
-  background_color: '#FFF6EF',
-  theme_color: '#FF6B6B',
-  icons: [
-    { src: _iconB64, sizes: '192x192', type: 'image/png' },
-    { src: _iconB64, sizes: '512x512', type: 'image/png' }
-  ]
-};
-const mBlob = new Blob([JSON.stringify(mf)], {type:'application/json'});
-const mLink = document.createElement('link');
-mLink.rel = 'manifest';
-mLink.href = URL.createObjectURL(mBlob);
-document.head.appendChild(mLink);
-
+// Registra el SW desde ./sw.js. Cuando hay una versión nueva esperando,
+// muestra el banner #update-banner para que la usuaria recargue.
 if ('serviceWorker' in navigator) {
-  const sw = `const C='pc-v3'; self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(['.','./css/styles.css','./js/app.js'])))); self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));`;
-  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').then(reg => {
+      const showUpdateBanner = () => {
+        const banner = document.getElementById('update-banner');
+        if (banner) banner.classList.add('show');
+      };
+      if (reg.waiting) showUpdateBanner();
+      reg.addEventListener('updatefound', () => {
+        const incoming = reg.installing;
+        if (!incoming) return;
+        incoming.addEventListener('statechange', () => {
+          if (incoming.state === 'installed' && navigator.serviceWorker.controller) {
+            showUpdateBanner();
+          }
+        });
+      });
+      const btn = document.getElementById('update-reload');
+      if (btn) btn.addEventListener('click', () => {
+        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      });
+    }).catch(() => {/* opcional, no es bloqueante */});
+
+    // Cuando el SW nuevo toma control, recargar para servir la versión nueva.
+    let reloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (reloading) return;
+      reloading = true;
+      window.location.reload();
+    });
+  });
 }
 
