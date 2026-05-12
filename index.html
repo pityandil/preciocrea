@@ -44,6 +44,16 @@
           <span class="cta-icon">✨</span> Calcular precio
         </button>
       </div>
+
+      <!-- Botón para instalar como app (se muestra solo cuando aplica) -->
+      <button class="btn-install" id="btn-install" type="button" onclick="handleInstallClick()">
+        <span class="install-icon">📲</span>
+        <div class="install-text">
+          <div class="install-title">Instalar en tu teléfono</div>
+          <div class="install-sub">Úsala como una app, sin abrir el navegador</div>
+        </div>
+        <span class="install-arrow">→</span>
+      </button>
     </div>
 
     <!-- Onboarding: solo se muestra la primera vez -->
@@ -704,6 +714,32 @@
 <div class="update-banner" id="update-banner" role="status" aria-live="polite">
   <span class="update-banner-text">✨ Hay una nueva versión disponible.</span>
   <button class="update-banner-btn" id="update-reload">Recargar</button>
+</div>
+
+<!-- Guía visual para instalar en iPhone -->
+<div class="modal-overlay" id="ios-install-overlay" role="dialog" aria-modal="true" aria-labelledby="ios-install-title">
+  <div class="modal ios-install-modal">
+    <div class="modal-icon">📲</div>
+    <div class="modal-title" id="ios-install-title">Instalar en tu iPhone</div>
+    <div class="ios-steps">
+      <div class="ios-step">
+        <span class="ios-step-n">1</span>
+        <div>Toca el botón <strong>Compartir</strong> <span class="ios-share-icon">⬆️</span> abajo de Safari.</div>
+      </div>
+      <div class="ios-step">
+        <span class="ios-step-n">2</span>
+        <div>Desliza y toca <strong>"Agregar a inicio"</strong> ➕</div>
+      </div>
+      <div class="ios-step">
+        <span class="ios-step-n">3</span>
+        <div>Toca <strong>"Agregar"</strong> arriba a la derecha.</div>
+      </div>
+    </div>
+    <div class="ios-install-tip">💡 Si usas Chrome en iPhone, primero abre el link en <strong>Safari</strong> — Apple solo permite instalar desde ahí.</div>
+    <div class="modal-actions" style="grid-template-columns: 1fr">
+      <button class="modal-btn modal-btn-confirm safe" onclick="hideIosInstallGuide()">Entendido</button>
+    </div>
+  </div>
 </div>
 
 <!-- Diálogo de confirmación reutilizable -->

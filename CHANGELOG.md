@@ -4,6 +4,18 @@ Historial de cambios de PrecioCrea. El formato sigue [Keep a Changelog](https://
 
 ---
 
+## [1.3.0] — 2026-05-12
+
+### Instalación con un toque
+
+- Botón "Instalar en tu teléfono" en el home, visible solo cuando aplica (oculto si la app ya está instalada en modo standalone).
+- En Android/desktop Chrome usa el evento `beforeinstallprompt` para abrir el diálogo nativo de instalación con un toque.
+- En iOS (donde Apple no expone esa API) abre una guía visual con los 3 pasos de Safari: Compartir → Agregar a inicio → Agregar. Incluye tip para usuarias de Chrome en iPhone (deben usar Safari).
+- Toast "🎉 ¡App instalada!" al detectar el evento `appinstalled`.
+- Bump `VERSION` a 1.3.0 en `sw.js` para que las instalaciones previas vean el banner "Hay una nueva versión disponible".
+
+---
+
 ## [1.2.0] — 2026-05-12
 
 ### Calidad y seguridad para las usuarias

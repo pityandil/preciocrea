@@ -1728,3 +1728,103 @@ body.hide-iva .iva-inline { display: none !important; }
 }
 .btn-det-secondary:active { transform: translateY(1px); }
 .btn-det-secondary:hover { border-color: var(--purple); }
+
+/* ============================================================
+   BOTÓN INSTALAR COMO APP (home)
+   ============================================================ */
+.btn-install {
+  display: none;
+  width: 100%;
+  margin: 14px 0 0;
+  padding: 14px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.85));
+  color: var(--text);
+  font-family: inherit;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  transition: transform 0.15s ease;
+  position: relative;
+  z-index: 1;
+}
+.btn-install.show { display: flex; }
+.btn-install:active { transform: scale(0.98); }
+.install-icon {
+  font-size: 26px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.install-text { flex: 1; min-width: 0; }
+.install-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+.install-sub {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.35;
+}
+.install-arrow {
+  color: var(--coral);
+  font-weight: 900;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   GUÍA DE INSTALACIÓN EN iOS
+   ============================================================ */
+.ios-install-modal { max-width: 380px; text-align: left; }
+.ios-install-modal .modal-icon,
+.ios-install-modal .modal-title { text-align: center; }
+.ios-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 16px 0 14px;
+}
+.ios-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.ios-step-n {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--purple));
+  color: #fff;
+  font-weight: 900;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ios-share-icon {
+  display: inline-block;
+  padding: 1px 5px;
+  background: var(--blue-light);
+  border-radius: 4px;
+  font-size: 12px;
+}
+.ios-install-tip {
+  background: var(--yellow-light);
+  border-left: 3px solid var(--yellow);
+  padding: 10px 12px;
+  font-size: 12.5px;
+  color: #7A5000;
+  line-height: 1.5;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 16px;
+}

@@ -43,7 +43,75 @@ const KEY_SHOW_IVA  = 'pc_show_iva';
   applyIvaPreference();
   renderHome();
   renderOnboarding();
+  setupInstallPrompt();
 })();
+
+// ===================================================
+// INSTALACIÓN COMO APP (PWA)
+// ===================================================
+// En Android/desktop Chrome capturamos el evento beforeinstallprompt para
+// poder disparar el diálogo nativo desde nuestro propio botón. En iOS,
+// donde Apple no expone esta API, mostramos una guía visual con los pasos
+// de Safari (Compartir → Agregar a inicio).
+let deferredInstallPrompt = null;
+
+function isStandalone() {
+  return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+}
+
+function isIos() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent || '');
+}
+
+function setupInstallPrompt() {
+  // Si la app ya está instalada (modo standalone), no hace falta el botón.
+  if (isStandalone()) return;
+
+  // Si es iOS, mostrar el botón con la guía manual.
+  if (isIos()) {
+    renderInstallButton();
+  }
+
+  // Android / desktop Chrome: esperar el evento del navegador.
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    renderInstallButton();
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredInstallPrompt = null;
+    const btn = document.getElementById('btn-install');
+    if (btn) btn.classList.remove('show');
+    toast('🎉 ¡App instalada!');
+  });
+}
+
+function renderInstallButton() {
+  const btn = document.getElementById('btn-install');
+  if (!btn || isStandalone()) return;
+  if (deferredInstallPrompt || isIos()) btn.classList.add('show');
+}
+
+function handleInstallClick() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then(({ outcome }) => {
+      if (outcome === 'accepted') {
+        deferredInstallPrompt = null;
+        const btn = document.getElementById('btn-install');
+        if (btn) btn.classList.remove('show');
+      }
+    }).catch(() => {/* el usuario cerró el diálogo */});
+  } else if (isIos()) {
+    document.getElementById('ios-install-overlay').classList.add('show');
+  }
+}
+
+function hideIosInstallGuide() {
+  document.getElementById('ios-install-overlay').classList.remove('show');
+}
 
 // ===================================================
 // VIEWS
