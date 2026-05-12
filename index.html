@@ -46,6 +46,20 @@
       </div>
     </div>
 
+    <!-- Onboarding: solo se muestra la primera vez -->
+    <div class="onboard-card" id="onboard-card" role="region" aria-label="Bienvenida">
+      <div class="onboard-title">Antes de empezar</div>
+      <ul class="onboard-list">
+        <li><span class="ob-emoji">📐</span><div><strong>4 pasos guiados</strong><br><span class="ob-sub">materiales, tiempo, creatividad y costos fijos</span></div></li>
+        <li><span class="ob-emoji">📱</span><div><strong>Tus datos quedan en este dispositivo</strong><br><span class="ob-sub">no enviamos nada a internet</span></div></li>
+        <li><span class="ob-emoji">🛡️</span><div><strong>Respalda regularmente</strong><br><span class="ob-sub">exporta el archivo .json para no perder tu trabajo</span></div></li>
+      </ul>
+      <div class="onboard-actions">
+        <button class="onboard-btn-secondary" onclick="startCalcWithExample()">Probar con ejemplo</button>
+        <button class="onboard-btn-primary" onclick="dismissOnboarding()">Entendido</button>
+      </div>
+    </div>
+
     <!-- SPOTIFY PODCAST -->
     <a class="spotify-card" href="https://open.spotify.com/episode/3fxJsZH38sC7rz4rpqnvej?si=HseuTv3GQBa1lPHREzj6oA" target="_blank" rel="noopener">
       <div class="spotify-icon">
@@ -391,6 +405,27 @@
         <p style="font-size:13.5px;line-height:1.65;color:var(--text);margin-bottom:14px">Si cambiaste de dispositivo o limpiaste el caché, selecciona el archivo <strong>.json</strong> que exportaste antes. Los productos nuevos se agregarán sin eliminar los actuales.</p>
         <button class="btn-save" style="background:linear-gradient(135deg,var(--purple),#DFA8FF);box-shadow:0 8px 24px rgba(199,125,255,0.4);margin-bottom:0" onclick="document.getElementById('inp-import').click()">📥 Seleccionar archivo</button>
         <input type="file" id="inp-import" accept=".json" onchange="importData(this)" style="display:none">
+      </div>
+
+      <!-- Preferencias -->
+      <div style="background:var(--card);border-radius:var(--radius);border:1.5px solid var(--border);padding:20px 18px;margin-bottom:14px;box-shadow:var(--shadow)">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="width:44px;height:44px;background:var(--coral-light);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">⚙️</div>
+          <div>
+            <div style="font-family:'Fraunces',serif;font-size:17px;font-weight:700">Preferencias</div>
+            <div style="font-size:12px;color:var(--muted);font-weight:600">Personaliza la app a tu negocio</div>
+          </div>
+        </div>
+        <label class="pref-toggle" for="pref-show-iva">
+          <div>
+            <div class="pref-toggle-title">Mostrar precios con IVA</div>
+            <div class="pref-toggle-sub">Si no facturas con boleta, puedes ocultar esta columna.</div>
+          </div>
+          <span class="pref-switch">
+            <input type="checkbox" id="pref-show-iva" onchange="toggleShowIva(this.checked)">
+            <span class="pref-slider"></span>
+          </span>
+        </label>
       </div>
 
       <!-- Tip -->

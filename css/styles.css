@@ -1565,3 +1565,166 @@ body {
 }
 .backup-reminder.urgent .bk-rem-text { color: #7A5000; }
 .backup-reminder.urgent .bk-rem-arrow { color: #C47B1D; }
+
+/* ============================================================
+   ONBOARDING (primera vez)
+   ============================================================ */
+.onboard-card {
+  display: none;
+  background: var(--card, #fff);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 18px 16px;
+  margin: 0 0 18px;
+  box-shadow: var(--shadow);
+}
+.onboard-card.show { display: block; }
+.onboard-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+.onboard-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.onboard-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--text);
+}
+.ob-emoji {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1.2;
+}
+.ob-sub {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 12.5px;
+}
+.onboard-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.onboard-btn-primary,
+.onboard-btn-secondary {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 11px 12px;
+  font-size: 13px;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+}
+.onboard-btn-primary {
+  background: linear-gradient(135deg, var(--coral), var(--purple));
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(199,125,255,0.3);
+}
+.onboard-btn-secondary {
+  background: var(--border);
+  color: var(--text);
+}
+.onboard-btn-primary:active,
+.onboard-btn-secondary:active { transform: translateY(1px); }
+
+/* ============================================================
+   PREFERENCIA: TOGGLE
+   ============================================================ */
+.pref-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  cursor: pointer;
+  user-select: none;
+}
+.pref-toggle-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.pref-toggle-sub {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.4;
+  font-weight: 600;
+}
+.pref-switch {
+  position: relative;
+  width: 48px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.pref-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.pref-slider {
+  position: absolute;
+  inset: 0;
+  background: var(--border);
+  border-radius: 50px;
+  transition: background 0.2s ease;
+}
+.pref-slider::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.22s cubic-bezier(0.34,1.2,0.64,1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+}
+.pref-switch input:checked + .pref-slider {
+  background: linear-gradient(135deg, var(--coral), var(--purple));
+}
+.pref-switch input:checked + .pref-slider::before {
+  transform: translateX(20px);
+}
+
+/* Oculta toda la información de IVA cuando la preferencia está apagada */
+body.hide-iva .iva-row,
+body.hide-iva .iva-badge,
+body.hide-iva .iva-inline { display: none !important; }
+
+/* ============================================================
+   ACCIONES SECUNDARIAS EN EL DETALLE (Duplicar / WhatsApp)
+   ============================================================ */
+.det-secondary-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 0 12px;
+}
+.btn-det-secondary {
+  border: 1.5px solid var(--border);
+  background: var(--card, #fff);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 800;
+  padding: 12px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.2s ease;
+}
+.btn-det-secondary:active { transform: translateY(1px); }
+.btn-det-secondary:hover { border-color: var(--purple); }

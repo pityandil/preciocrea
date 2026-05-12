@@ -26,15 +26,23 @@ const WISDOMS = [
   () => `Fijar tu precio mirando solo a la competencia es una <strong>trampa</strong>. Tu vecina puede tener costos distintos, o estar perdiendo dinero sin saberlo. Confía en tus propios números. 🔢`
 ];
 
+// Claves de preferencias en localStorage
+const KEY_PRODUCTS  = 'pc_v1';
+const KEY_BACKUP    = 'pc_last_backup';
+const KEY_ONBOARD   = 'pc_onboarding_done';
+const KEY_SHOW_IVA  = 'pc_show_iva';
+
 // ===================================================
 // INIT
 // ===================================================
 (function init() {
   try {
-    const saved = localStorage.getItem('pc_v1');
+    const saved = localStorage.getItem(KEY_PRODUCTS);
     if (saved) S.products = JSON.parse(saved);
   } catch(e) {}
+  applyIvaPreference();
   renderHome();
+  renderOnboarding();
 })();
 
 // ===================================================
@@ -76,7 +84,7 @@ function renderHome() {
       <div class="pc-emoji">${p.emoji}</div>
       <div class="pc-info">
         <div class="pc-name">${esc(p.name)}</div>
-        <div class="pc-prices">Ideal: <strong>${fmt(p.idealP)}</strong> · c/IVA: <strong>${fmt(p.idealP* (1 + IVA))}</strong></div>
+        <div class="pc-prices">Ideal: <strong>${fmt(p.idealP)}</strong><span class="iva-inline"> · c/IVA: <strong>${fmt(p.idealP*(1+IVA))}</strong></span></div>
       </div>
       <div class="pc-actions">
         <button class="pc-edit" onclick="showDetail(event,${p.id})" title="Editar">✏️</button>
@@ -85,6 +93,89 @@ function renderHome() {
     </div>`).join('');
 
   renderBackupReminder();
+}
+
+// ===================================================
+// ONBOARDING
+// ===================================================
+function renderOnboarding() {
+  const card = document.getElementById('onboard-card');
+  if (!card) return;
+  let done = false;
+  try { done = localStorage.getItem(KEY_ONBOARD) === '1'; } catch(e) {}
+  card.classList.toggle('show', !done);
+}
+
+function dismissOnboarding() {
+  try { localStorage.setItem(KEY_ONBOARD, '1'); } catch(e) {}
+  renderOnboarding();
+}
+
+// Empieza la calculadora con un ejemplo pre-rellenado (jabón de lavanda).
+function startCalcWithExample() {
+  dismissOnboarding();
+  startCalc();
+  const name = 'Jabón de lavanda 100g';
+  document.getElementById('inp-name').value = name;
+  S.p.name = name;
+  const matName = document.querySelector('.mat-name');
+  const matCost = document.querySelector('.mat-cost');
+  if (matName) matName.value = 'Aceite de coco';
+  if (matCost) { matCost.value = '2170'; calcMatTotal(); }
+}
+
+// ===================================================
+// PREFERENCIA: MOSTRAR / OCULTAR IVA
+// ===================================================
+function isIvaVisible() {
+  try { return localStorage.getItem(KEY_SHOW_IVA) !== '0'; }
+  catch(e) { return true; }
+}
+
+function applyIvaPreference() {
+  const visible = isIvaVisible();
+  document.body.classList.toggle('hide-iva', !visible);
+  const cb = document.getElementById('pref-show-iva');
+  if (cb) cb.checked = visible;
+}
+
+function toggleShowIva(checked) {
+  try { localStorage.setItem(KEY_SHOW_IVA, checked ? '1' : '0'); } catch(e) {}
+  applyIvaPreference();
+}
+
+// ===================================================
+// DUPLICAR / COMPARTIR
+// ===================================================
+function duplicateProduct(id) {
+  const p = S.products.find(x => x.id === id);
+  if (!p) return;
+  const copy = {
+    ...p,
+    id: Date.now() + Math.floor(Math.random() * 1000),
+    name: `${p.name} (copia)`.slice(0, MAX_NAME_LEN),
+    date: new Date().toLocaleDateString('es-CL')
+  };
+  S.products.unshift(copy);
+  if (!persistProducts()) return;
+  toast('📋 Producto duplicado');
+  setTimeout(() => { renderHome(); showView('view-home'); }, 700);
+}
+
+function shareWhatsApp(id) {
+  const p = S.products.find(x => x.id === id);
+  if (!p) return;
+  const lines = [
+    `Hola! Te paso la cotización de *${p.name}* ${p.emoji}`,
+    ``,
+    `💰 Precio: ${fmt(p.idealP)}`
+  ];
+  if (isIvaVisible()) {
+    lines.push(`🧾 Con IVA: ${fmt(p.idealP * (1 + IVA))}`);
+  }
+  lines.push(``, `¡Gracias por confiar en mi trabajo! 💛`);
+  const url = `https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`;
+  window.open(url, '_blank', 'noopener,noreferrer');
 }
 
 // ===================================================
@@ -435,9 +526,13 @@ function showDetail(idOrEvent, id) {
       <div class="det-cr-grid" id="det-cr-grid">${crGrid}</div>
     </div>
 
-    <!-- SAVE -->
+    <!-- SAVE + ACCIONES -->
     <div style="padding-bottom:12px">
       <button class="btn-det-save" onclick="saveDetProduct(${realId})">💾 Guardar cambios</button>
+      <div class="det-secondary-actions">
+        <button class="btn-det-secondary" onclick="shareWhatsApp(${realId})">📱 WhatsApp</button>
+        <button class="btn-det-secondary" onclick="duplicateProduct(${realId})">📋 Duplicar</button>
+      </div>
       <button class="btn-new-calc" onclick="showView('view-home')" style="width:100%">← Volver al inicio</button>
     </div>`;
 
@@ -501,7 +596,7 @@ function saveDetProduct(id) {
 // Muestra un toast claro si falla (cuota llena, Safari privado, etc.).
 function persistProducts() {
   try {
-    localStorage.setItem('pc_v1', JSON.stringify(S.products));
+    localStorage.setItem(KEY_PRODUCTS, JSON.stringify(S.products));
     return true;
   } catch (err) {
     const isQuota = err && (err.name === 'QuotaExceededError' || err.code === 22);
@@ -536,7 +631,7 @@ function exportData() {
   a.click();
   URL.revokeObjectURL(url);
   // Marca que se respaldó para apagar el recordatorio
-  try { localStorage.setItem('pc_last_backup', String(Date.now())); } catch(e) {}
+  try { localStorage.setItem(KEY_BACKUP, String(Date.now())); } catch(e) {}
   renderBackupReminder();
   toast('📤 Respaldo descargado');
 }
@@ -547,7 +642,7 @@ function exportData() {
 // Devuelve {newCount, days, hasBackup} o null si no hay nada que recordar.
 function getBackupState() {
   if (S.products.length === 0) return null;
-  const lastRaw = parseInt(localStorage.getItem('pc_last_backup') || '0', 10);
+  const lastRaw = parseInt(localStorage.getItem(KEY_BACKUP) || '0', 10);
   const hasBackup = lastRaw > 0;
   // Cuántos productos se crearon después del último respaldo
   const newCount = S.products.filter(p => Number(p.id) > lastRaw).length;
