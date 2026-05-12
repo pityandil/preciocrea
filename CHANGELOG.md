@@ -4,6 +4,43 @@ Historial de cambios de PrecioCrea. El formato sigue [Keep a Changelog](https://
 
 ---
 
+## [1.2.0] — 2026-05-12
+
+### Calidad y seguridad para las usuarias
+
+#### Correcciones
+- **Crítico:** corregido un doble `<script>` que impedía la carga de `js/app.js` en navegadores estrictos. Agregado `<body>` de apertura que faltaba.
+- `esc()` ahora también escapa comillas dobles y simples y maneja `null`/`undefined`.
+
+#### Seguridad de datos
+- Validación y sanitización del archivo importado: límite de 1 MB, reconstrucción de cada producto desde cero (rechaza campos desconocidos, valida tipos, longitudes y rangos).
+- Mensajes diferenciados para archivo grande, sin productos, ningún producto válido y productos ya existentes.
+- Nuevo helper `persistProducts()` con aviso claro cuando `localStorage` falla (cuota llena, Safari modo privado) — reemplaza los `try/catch` mudos en `saveProduct`, `delProduct`, `saveDetProduct` e `importData`.
+- Modal de confirmación reutilizable antes de eliminar productos, con cierre por ESC/backdrop y foco en "Cancelar" por defecto.
+
+#### PWA
+- `sw.js` y `manifest.webmanifest` como archivos reales (antes se generaban inline con `Blob`/`URL.createObjectURL`).
+- Service Worker con `VERSION` explícita, limpieza de caches antiguos en `activate` y soporte para `SKIP_WAITING`.
+- Ícono PNG real en `assets/icons/icon-192.png` (decodificado desde el data URI embebido).
+- Banner "Hay una nueva versión disponible — Recargar" cuando el SW detecta un update.
+
+#### Endurecimiento
+- Meta `Content-Security-Policy` restrictiva en `index.html` (default `'self'`, manifest/worker mismo origen, object/frame externos bloqueados, Google Fonts permitido).
+- `maxlength` en inputs de texto (100/60 chars), `max` en inputs numéricos (100M/9999h/100k unidades) e `inputmode` para teclado numérico móvil.
+- `sanitizeNum()` capea con `Math.min(n, MAX_INPUT_NUM)` además de rechazar `NaN`/`Infinity`/negativos.
+
+#### UX de confianza
+- Banner de recordatorio inteligente: cuenta productos sin respaldar y días desde el último backup; estado "urgente" amarillo si pasaron 7+ días o hay 3+ productos nuevos.
+- Banner de onboarding descartable la primera vez con CTA "Probar con ejemplo" (jabón de lavanda pre-rellenado).
+- Toggle "Mostrar precios con IVA" persistente en la vista de respaldo.
+- Botón "📱 WhatsApp" en el detalle del producto: abre `wa.me` con mensaje pre-armado (nombre, precio, c/IVA si está activo).
+- Botón "📋 Duplicar" en el detalle: crea una copia para variantes del producto.
+
+#### Documentación
+- `docs/QA_CHECKLIST.md` con escenarios manuales a pasar antes de cada release (smoke test, onboarding, backup/restore, robustez, validaciones, compartir, IVA, PWA, seguridad, layout).
+
+---
+
 ## [1.1.0] — 2026-05-09
 
 ### Reorganización y mejora del proyecto

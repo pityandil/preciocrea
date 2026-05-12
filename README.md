@@ -35,11 +35,15 @@ Para compartir o publicar: sube `index.html` + las carpetas `css/` y `js/` a cua
 ```
 preciocrea/
 ├── index.html                    ← Aplicación principal
+├── manifest.webmanifest          ← Manifest PWA
+├── sw.js                         ← Service Worker (bump VERSION al publicar)
 ├── css/
 │   └── styles.css                ← Todos los estilos
 ├── js/
 │   └── app.js                    ← Toda la lógica
 ├── assets/
+│   ├── icons/
+│   │   └── icon-192.png          ← Ícono PWA
 │   ├── audio/
 │   │   ├── podcast_preciocrea.mp3
 │   │   └── Cobra lo que realmente vale tu trabajo.mp3
@@ -48,6 +52,8 @@ preciocrea/
 │       ├── lanzamiento_emocional.pptx
 │       ├── propuesta_de_valor.pdf
 │       └── propuesta_de_valor.docx
+├── docs/
+│   └── QA_CHECKLIST.md           ← Pruebas manuales pre-release
 ├── slides/
 │   ├── guia_operativa/           ← Diapositivas PNG de la guía
 │   └── lanzamiento_emocional/    ← Diapositivas PNG del lanzamiento
