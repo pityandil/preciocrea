@@ -1524,8 +1524,7 @@ body {
    ============================================================ */
 .backup-reminder {
   display: none;
-  width: 100%;
-  margin: 0 0 16px;
+  margin: 0 22px 16px;
   padding: 13px 14px;
   border: 1.5px solid var(--border);
   background: var(--card, #fff);
@@ -1575,7 +1574,7 @@ body {
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   padding: 20px 18px 16px;
-  margin: 0 0 18px;
+  margin: 0 22px 18px;
   box-shadow: var(--shadow);
 }
 .onboard-card.show { display: block; }
