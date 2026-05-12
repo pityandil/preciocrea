@@ -14,9 +14,10 @@ const IVA     = 0.19;          // Impuesto al Valor Agregado (Chile)
 const MARGINS = [30, 50, 80, 120]; // Opciones de margen de ganancia (%)
 
 // Límites de seguridad para entrada del usuario
-const MAX_IMPORT_SIZE = 1024 * 1024; // 1 MB
+const MAX_IMPORT_SIZE = 1024 * 1024;   // 1 MB
 const MAX_NAME_LEN    = 100;
 const MAX_DATE_LEN    = 30;
+const MAX_INPUT_NUM   = 99_999_999;    // 100 millones — tope razonable
 const VALID_CR_LVLS   = Object.keys(CR_MULT);
 const WISDOMS = [
   p => `El precio mínimo de <strong>${fmt(p.minP)}</strong> es tu suelo: <strong>nunca vendas bajo ese valor</strong>, ni en liquidaciones ni a familiares. El precio ideal (<strong>${fmt(p.idealP)}</strong>) es lo que te permite reinvertir y crecer de verdad.`,
@@ -110,8 +111,8 @@ function resetState() {
   q('mat-total').textContent = '$0';
   q('mat-list').innerHTML = `
     <div class="mat-row">
-      <input class="field-input mat-name" type="text" placeholder="ej: Aceite de coco" style="--step-accent:var(--coral)">
-      <input class="field-input mat-cost" type="number" placeholder="$" min="0" oninput="calcMatTotal()" style="--step-accent:var(--coral)">
+      <input class="field-input mat-name" type="text" placeholder="ej: Aceite de coco" maxlength="60" autocomplete="off" style="--step-accent:var(--coral)">
+      <input class="field-input mat-cost" type="number" placeholder="$" min="0" max="99999999" inputmode="numeric" oninput="calcMatTotal()" style="--step-accent:var(--coral)">
       <button class="btn-rem" onclick="remMat(this)">✕</button>
     </div>`;
 
@@ -172,8 +173,8 @@ function addMat() {
   const row = document.createElement('div');
   row.className = 'mat-row';
   row.innerHTML = `
-    <input class="field-input mat-name" type="text" placeholder="ej: Fragancia" style="--step-accent:var(--coral)">
-    <input class="field-input mat-cost" type="number" placeholder="$" min="0" oninput="calcMatTotal()" style="--step-accent:var(--coral)">
+    <input class="field-input mat-name" type="text" placeholder="ej: Fragancia" maxlength="60" autocomplete="off" style="--step-accent:var(--coral)">
+    <input class="field-input mat-cost" type="number" placeholder="$" min="0" max="99999999" inputmode="numeric" oninput="calcMatTotal()" style="--step-accent:var(--coral)">
     <button class="btn-rem" onclick="remMat(this)">✕</button>`;
   list.appendChild(row);
   row.querySelector('input').focus();
@@ -417,15 +418,15 @@ function showDetail(idOrEvent, id) {
 
       <div class="det-field-row">
         <div class="det-field-lbl">🧺 Materiales</div>
-        <input class="det-field-input" type="number" id="det-mat" value="${p.mat}" min="0" oninput="detRecalc(${realId})">
+        <input class="det-field-input" type="number" id="det-mat" value="${p.mat}" min="0" max="99999999" inputmode="numeric" oninput="detRecalc(${realId})">
       </div>
       <div class="det-field-row">
         <div class="det-field-lbl">⏰ Tu tiempo</div>
-        <input class="det-field-input" type="number" id="det-labor" value="${p.labor}" min="0" oninput="detRecalc(${realId})">
+        <input class="det-field-input" type="number" id="det-labor" value="${p.labor}" min="0" max="99999999" inputmode="numeric" oninput="detRecalc(${realId})">
       </div>
       <div class="det-field-row">
         <div class="det-field-lbl">🏠 Costos fijos</div>
-        <input class="det-field-input" type="number" id="det-struct" value="${p.struct}" min="0" oninput="detRecalc(${realId})">
+        <input class="det-field-input" type="number" id="det-struct" value="${p.struct}" min="0" max="99999999" inputmode="numeric" oninput="detRecalc(${realId})">
       </div>
 
       <div class="field-label" style="margin-top:14px; margin-bottom:10px">🎨 Carga creativa</div>
@@ -644,11 +645,12 @@ document.addEventListener('click', e => {
 // HELPERS
 // ===================================================
 
-// Returns a safe non-negative finite number, 0 otherwise
+// Devuelve un número finito no negativo, capado a MAX_INPUT_NUM.
+// Cualquier entrada inválida (NaN, Infinity, negativo, no numérico) → 0.
 function sanitizeNum(val) {
   const n = parseFloat(val);
   if (!isFinite(n) || isNaN(n) || n < 0) return 0;
-  return n;
+  return Math.min(n, MAX_INPUT_NUM);
 }
 
 function fmt(n) {
