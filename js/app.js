@@ -12,6 +12,12 @@ const S = {
 const CR_MULT = { facil:0.05, moderado:0.15, intenso:0.25, obra:0.40 };
 const IVA     = 0.19;          // Impuesto al Valor Agregado (Chile)
 const MARGINS = [30, 50, 80, 120]; // Opciones de margen de ganancia (%)
+
+// Límites de seguridad para entrada del usuario
+const MAX_IMPORT_SIZE = 1024 * 1024; // 1 MB
+const MAX_NAME_LEN    = 100;
+const MAX_DATE_LEN    = 30;
+const VALID_CR_LVLS   = Object.keys(CR_MULT);
 const WISDOMS = [
   p => `El precio mínimo de <strong>${fmt(p.minP)}</strong> es tu suelo: <strong>nunca vendas bajo ese valor</strong>, ni en liquidaciones ni a familiares. El precio ideal (<strong>${fmt(p.idealP)}</strong>) es lo que te permite reinvertir y crecer de verdad.`,
   () => `Recuerda: el cliente que valora tu arte pagará el precio justo. <strong>Quienes solo buscan "lo más barato" no son tus clientes ideales.</strong> Cobrar bien atrae a quienes atesorarán tu trabajo.`,
@@ -474,6 +480,25 @@ function saveDetProduct(id) {
 }
 
 // ===================================================
+// PERSISTENCIA
+// ===================================================
+// Guarda S.products en localStorage. Devuelve true en éxito.
+// Muestra un toast claro si falla (cuota llena, Safari privado, etc.).
+function persistProducts() {
+  try {
+    localStorage.setItem('pc_v1', JSON.stringify(S.products));
+    return true;
+  } catch (err) {
+    const isQuota = err && (err.name === 'QuotaExceededError' || err.code === 22);
+    toast(isQuota
+      ? '⚠️ Sin espacio para guardar. Exporta un respaldo y borra productos antiguos.'
+      : '⚠️ No se pudo guardar en este navegador. Exporta un respaldo para no perder tu trabajo.'
+    );
+    return false;
+  }
+}
+
+// ===================================================
 // BACKUP — EXPORT / IMPORT
 // ===================================================
 function exportData() {
@@ -498,28 +523,86 @@ function exportData() {
   toast('📤 Respaldo descargado');
 }
 
+// Saneo un producto importado: descarta campos desconocidos, valida tipos
+// y rangos, y reconstruye el objeto desde cero. Devuelve null si es inválido.
+function sanitizeImportedProduct(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+
+  const name = typeof raw.name === 'string'
+    ? raw.name.trim().slice(0, MAX_NAME_LEN)
+    : '';
+  if (!name) return null;
+
+  const safeNum = v => {
+    const n = Number(v);
+    return Number.isFinite(n) && n >= 0 ? Math.round(n) : 0;
+  };
+
+  const marginNum = Number(raw.margin);
+  const margin = MARGINS.includes(marginNum) ? marginNum : 50;
+  const crLvl = VALID_CR_LVLS.includes(raw.crLvl) ? raw.crLvl : 'facil';
+
+  const rawId = Number(raw.id);
+  const id = Number.isFinite(rawId) && rawId > 0 ? rawId : (Date.now() + Math.floor(Math.random() * 1000));
+
+  const date = typeof raw.date === 'string'
+    ? raw.date.slice(0, MAX_DATE_LEN)
+    : new Date().toLocaleDateString('es-CL');
+
+  return {
+    id, name,
+    emoji:  getEmoji(name),
+    date,
+    mat:    safeNum(raw.mat),
+    labor:  safeNum(raw.labor),
+    cr:     safeNum(raw.cr),
+    struct: safeNum(raw.struct),
+    minP:   safeNum(raw.minP),
+    idealP: safeNum(raw.idealP),
+    margin, crLvl
+  };
+}
+
 function importData(input) {
   const file = input.files[0];
   if (!file) return;
+  if (file.size > MAX_IMPORT_SIZE) {
+    toast('❌ Archivo demasiado grande (máx. 1 MB)');
+    input.value = '';
+    return;
+  }
   const reader = new FileReader();
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      // Accept both raw array or wrapped object
-      const imported = Array.isArray(data) ? data : (data.products || []);
-      if (!imported.length) { toast('⚠️ El archivo no tiene productos'); return; }
+      const rawList = Array.isArray(data) ? data : (data && Array.isArray(data.products) ? data.products : []);
+      if (!rawList.length) { toast('⚠️ El archivo no tiene productos'); input.value=''; return; }
 
-      // Merge: keep existing, add imported ones that don't already exist (by id)
+      const sanitized = rawList.map(sanitizeImportedProduct).filter(Boolean);
+      if (!sanitized.length) {
+        toast('⚠️ Ningún producto del archivo es válido');
+        input.value = ''; return;
+      }
+
       const existingIds = new Set(S.products.map(p => p.id));
-      const newOnes = imported.filter(p => !existingIds.has(p.id));
+      const newOnes = sanitized.filter(p => !existingIds.has(p.id));
+      if (!newOnes.length) {
+        toast('ℹ️ Estos productos ya están guardados');
+        input.value = ''; return;
+      }
+
       S.products = [...newOnes, ...S.products];
-      try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
+      if (!persistProducts()) { input.value = ''; return; }
       renderHome();
       toast(`✅ ${newOnes.length} producto(s) importado(s)`);
     } catch(err) {
       toast('❌ Archivo inválido');
     }
-    input.value = ''; // reset so same file can be re-imported
+    input.value = '';
+  };
+  reader.onerror = () => {
+    toast('❌ No se pudo leer el archivo');
+    input.value = '';
   };
   reader.readAsText(file);
 }
