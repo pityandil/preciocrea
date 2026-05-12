@@ -1837,9 +1837,11 @@ body.hide-iva .iva-inline { display: none !important; }
   vertical-align: -0.12em;
   flex-shrink: 0;
 }
-.brand-wa      { fill: #25D366; }
-.brand-android { fill: #3DDC84; }
-.brand-apple   { fill: #1E1E2E; }
+/* Usamos color + fill="currentColor" en el SVG para que el path
+   herede el color de forma confiable en todos los navegadores. */
+.brand-wa      { color: #25D366; fill: #25D366; }
+.brand-android { color: #3DDC84; fill: #3DDC84; }
+.brand-apple   { color: #1E1E2E; fill: #1E1E2E; }
 
 /* Chips de plataforma en el botón "Instalar" */
 .install-sub {
