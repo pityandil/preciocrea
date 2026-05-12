@@ -17,3 +17,6 @@ _archivo/
 
 # Archivos de respaldo exportados por la app (no van en git)
 preciocrea-respaldo-*.json
+
+# Build portable (regenerar con: node scripts/build-portable.js)
+preciocrea-portable.html

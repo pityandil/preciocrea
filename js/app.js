@@ -875,6 +875,7 @@ function confirmDialog({ icon = '⚠️', title = '¿Confirmar?', message = '', 
 // ===================================================
 // PWA — Service Worker
 // ===================================================
+// BUILD-PORTABLE-STRIP-START
 // Registra el SW desde ./sw.js. Cuando hay una versión nueva esperando,
 // muestra el banner #update-banner para que la usuaria recargue.
 if ('serviceWorker' in navigator) {
@@ -909,4 +910,5 @@ if ('serviceWorker' in navigator) {
     });
   });
 }
+// BUILD-PORTABLE-STRIP-END
 

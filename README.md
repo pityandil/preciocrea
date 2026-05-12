@@ -28,7 +28,17 @@ Entrega un **precio mínimo** (punto de equilibrio) y un **precio ideal** con m�
 
 Abre `index.html` directamente en el navegador — no requiere servidor ni instalación.
 
-Para compartir o publicar: sube `index.html` + las carpetas `css/` y `js/` a cualquier hosting estático (GitHub Pages, Netlify, etc.).
+Para compartir o publicar: sube todo el proyecto a cualquier hosting estático (GitHub Pages, Netlify, etc.). Allí funciona como PWA instalable.
+
+## Distribución portable (archivo único)
+
+Para casos en que no se puede usar el link (enviar por WhatsApp/Drive/email), se puede generar un único `preciocrea-portable.html` con CSS, JS e ícono embebidos:
+
+```bash
+node scripts/build-portable.js
+```
+
+El archivo `preciocrea-portable.html` (~120 KB) queda en la raíz. Se abre con doble click en cualquier navegador moderno. **Limitación:** no funciona como PWA instalable (los Service Workers requieren HTTPS), pero la app funciona normal y `localStorage` persiste los productos.
 
 ## Estructura del proyecto
 
