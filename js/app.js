@@ -83,6 +83,8 @@ function renderHome() {
         <button class="pc-delete" onclick="delProduct(event,${p.id})" title="Eliminar">🗑️</button>
       </div>
     </div>`).join('');
+
+  renderBackupReminder();
 }
 
 // ===================================================
@@ -533,7 +535,43 @@ function exportData() {
   a.download = `preciocrea-respaldo-${date}.json`;
   a.click();
   URL.revokeObjectURL(url);
+  // Marca que se respaldó para apagar el recordatorio
+  try { localStorage.setItem('pc_last_backup', String(Date.now())); } catch(e) {}
+  renderBackupReminder();
   toast('📤 Respaldo descargado');
+}
+
+// ===================================================
+// RECORDATORIO DE RESPALDO
+// ===================================================
+// Devuelve {newCount, days, hasBackup} o null si no hay nada que recordar.
+function getBackupState() {
+  if (S.products.length === 0) return null;
+  const lastRaw = parseInt(localStorage.getItem('pc_last_backup') || '0', 10);
+  const hasBackup = lastRaw > 0;
+  // Cuántos productos se crearon después del último respaldo
+  const newCount = S.products.filter(p => Number(p.id) > lastRaw).length;
+  if (newCount === 0) return null;
+  const days = hasBackup ? Math.floor((Date.now() - lastRaw) / 86400000) : null;
+  return { newCount, days, hasBackup };
+}
+
+function renderBackupReminder() {
+  const el = document.getElementById('backup-reminder');
+  if (!el) return;
+  const state = getBackupState();
+  if (!state) { el.classList.remove('show'); return; }
+
+  const { newCount, days, hasBackup } = state;
+  const msg = !hasBackup
+    ? `Aún no has respaldado tus productos.`
+    : (days >= 7
+        ? `Llevas ${days} días sin respaldar y tienes ${newCount} producto/s nuevo/s.`
+        : `Tienes ${newCount} producto/s sin respaldar.`);
+  el.querySelector('.bk-rem-text').textContent = msg;
+  // Solo destacar si pasaron 7+ días o son varios productos nuevos
+  el.classList.toggle('urgent', (days !== null && days >= 7) || newCount >= 3);
+  el.classList.add('show');
 }
 
 // Saneo un producto importado: descarta campos desconocidos, valida tipos

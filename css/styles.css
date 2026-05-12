@@ -1518,3 +1518,50 @@ body {
   flex-shrink: 0;
 }
 .update-banner-btn:active { transform: translateY(1px); }
+
+/* ============================================================
+   RECORDATORIO DE RESPALDO (home)
+   ============================================================ */
+.backup-reminder {
+  display: none;
+  width: 100%;
+  margin: 0 0 16px;
+  padding: 13px 14px;
+  border: 1.5px solid var(--border);
+  background: var(--card, #fff);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  text-align: left;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease, box-shadow 0.2s ease;
+}
+.backup-reminder.show { display: flex; }
+.backup-reminder:active { transform: translateY(1px); }
+.bk-rem-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.bk-rem-text {
+  flex: 1;
+  line-height: 1.4;
+  color: var(--text);
+  font-weight: 600;
+}
+.bk-rem-arrow {
+  color: var(--muted);
+  font-weight: 800;
+  flex-shrink: 0;
+}
+.backup-reminder.urgent {
+  background: linear-gradient(135deg, #FFF6E5, #FFEFD4);
+  border-color: #FFD58A;
+}
+.backup-reminder.urgent .bk-rem-text { color: #7A5000; }
+.backup-reminder.urgent .bk-rem-arrow { color: #C47B1D; }
