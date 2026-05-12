@@ -323,7 +323,7 @@ function saveProduct() {
     crLvl:  S.p.cr
   };
   S.products.unshift(prod);
-  try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
+  if (!persistProducts()) return;
   renderHome();
   toast('✨ ¡Producto guardado!');
   setTimeout(() => showView('view-home'), 1400);
@@ -331,10 +331,22 @@ function saveProduct() {
 
 function delProduct(e, id) {
   e.stopPropagation();
-  S.products = S.products.filter(p => p.id !== id);
-  try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
-  renderHome();
-  toast('🗑️ Producto eliminado');
+  const p = S.products.find(p => p.id === id);
+  if (!p) return;
+  confirmDialog({
+    icon: '🗑️',
+    title: '¿Eliminar producto?',
+    message: `"${p.name}" se borrará de tu lista. Esta acción no se puede deshacer.`,
+    confirmText: 'Eliminar',
+    cancelText: 'Cancelar',
+    dangerous: true
+  }).then(ok => {
+    if (!ok) return;
+    S.products = S.products.filter(p => p.id !== id);
+    if (!persistProducts()) return;
+    renderHome();
+    toast('🗑️ Producto eliminado');
+  });
 }
 
 // ===================================================
@@ -473,7 +485,7 @@ function saveDetProduct(id) {
   const minP   = mat + labor + cr + struct;
   const idealP = minP * (1 + p.margin / 100);
   S.products[idx] = { ...p, mat:Math.round(mat), labor:Math.round(labor), struct:Math.round(struct), cr:Math.round(cr), minP:Math.round(minP), idealP:Math.round(idealP) };
-  try { localStorage.setItem('pc_v1', JSON.stringify(S.products)); } catch(e) {}
+  if (!persistProducts()) return;
   renderHome();
   toast('✨ ¡Cambios guardados!');
   setTimeout(() => showView('view-home'), 1400);
@@ -594,7 +606,7 @@ function importData(input) {
       S.products = [...newOnes, ...S.products];
       if (!persistProducts()) { input.value = ''; return; }
       renderHome();
-      toast(`✅ ${newOnes.length} producto(s) importado(s)`);
+      toast(`✅ ${newOnes.length} producto(s) importado/s`);
     } catch(err) {
       toast('❌ Archivo inválido');
     }
@@ -679,6 +691,50 @@ function toast(msg) {
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Diálogo modal de confirmación. Devuelve Promise<boolean>.
+// Sólo permite UN diálogo a la vez; si ya hay uno abierto, devuelve false.
+let _confirmBusy = false;
+function confirmDialog({ icon = '⚠️', title = '¿Confirmar?', message = '', confirmText = 'Aceptar', cancelText = 'Cancelar', dangerous = true } = {}) {
+  return new Promise(resolve => {
+    if (_confirmBusy) { resolve(false); return; }
+    _confirmBusy = true;
+    const overlay = document.getElementById('modal-overlay');
+    const btnOk   = document.getElementById('modal-confirm');
+    const btnNo   = document.getElementById('modal-cancel');
+    document.getElementById('modal-icon').textContent  = icon;
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-msg').textContent   = message;
+    btnOk.textContent = confirmText;
+    btnNo.textContent = cancelText;
+    btnOk.classList.toggle('safe', !dangerous);
+
+    const cleanup = (val) => {
+      overlay.classList.remove('show');
+      btnOk.removeEventListener('click', onOk);
+      btnNo.removeEventListener('click', onNo);
+      overlay.removeEventListener('click', onBgClick);
+      document.removeEventListener('keydown', onKey);
+      _confirmBusy = false;
+      resolve(val);
+    };
+    const onOk = () => cleanup(true);
+    const onNo = () => cleanup(false);
+    const onBgClick = (e) => { if (e.target === overlay) cleanup(false); };
+    const onKey = (e) => {
+      if (e.key === 'Escape') cleanup(false);
+      if (e.key === 'Enter')  cleanup(true);
+    };
+
+    btnOk.addEventListener('click', onOk);
+    btnNo.addEventListener('click', onNo);
+    overlay.addEventListener('click', onBgClick);
+    document.addEventListener('keydown', onKey);
+    overlay.classList.add('show');
+    // Pone el foco en cancelar por defecto (más seguro)
+    setTimeout(() => btnNo.focus(), 50);
+  });
 }
 
 // ===================================================
