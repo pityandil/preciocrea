@@ -1827,3 +1827,60 @@ body.hide-iva .iva-inline { display: none !important; }
   border-radius: 0 8px 8px 0;
   margin-bottom: 16px;
 }
+
+/* ============================================================
+   ICONOS DE MARCA (SVG)
+   ============================================================ */
+.brand-svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.12em;
+  flex-shrink: 0;
+}
+.brand-wa      { fill: #25D366; }
+.brand-android { fill: #3DDC84; }
+.brand-apple   { fill: #1E1E2E; }
+
+/* Chips de plataforma en el botón "Instalar" */
+.install-sub {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.platform-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 3px 9px 3px 7px;
+  border-radius: 50px;
+}
+.platform-chip .brand-svg {
+  width: 13px;
+  height: 13px;
+  vertical-align: 0;
+}
+
+/* Botón WhatsApp con logo */
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-whatsapp .brand-svg {
+  width: 18px;
+  height: 18px;
+}
+.btn-whatsapp:hover { border-color: #25D366; }
+
+/* Icono Apple en modal de iOS */
+.ios-modal-icon .brand-svg {
+  width: 38px;
+  height: 38px;
+}

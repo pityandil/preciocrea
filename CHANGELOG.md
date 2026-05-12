@@ -4,6 +4,17 @@ Historial de cambios de PrecioCrea. El formato sigue [Keep a Changelog](https://
 
 ---
 
+## [1.4.0] — 2026-05-12
+
+### Logos de marca en los botones
+
+- Botón "WhatsApp" en el detalle del producto: ahora muestra el logo oficial verde de WhatsApp en lugar del emoji 📱.
+- Botón "Instalar en tu teléfono": el subtítulo lista las plataformas con chips que incluyen los logos de Android (bugdroid verde) y Apple — más claro de un vistazo que es compatible con ambos sistemas.
+- Modal de instalación en iPhone: el ícono superior ahora es el logo de Apple (más reconocible que el emoji genérico).
+- Footer: disclaimer extendido para cubrir Spotify, WhatsApp, Android y Apple como marcas referenciales de sus respectivos propietarios.
+
+---
+
 ## [1.3.0] — 2026-05-12
 
 ### Instalación con un toque

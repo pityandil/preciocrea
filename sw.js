@@ -1,7 +1,7 @@
 // PrecioCrea Service Worker
 // Bump VERSION cuando publiques una nueva versión: invalida el caché anterior
 // y notifica al cliente para mostrar el banner "nueva versión disponible".
-const VERSION = '1.3.1';
+const VERSION = '1.4.0';
 const CACHE = `preciocrea-${VERSION}`;
 const ASSETS = [
   './',
