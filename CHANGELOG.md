@@ -2,6 +2,34 @@
 
 Historial de cambios de PrecioCrea. El formato sigue [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/).
 
+> **Nota sobre versionado:** La versión **1.0.0** marca el primer release público estable (sin etiqueta "BETA"). Las entradas previas listadas más abajo (1.1.0 – 1.4.0) corresponden a iteraciones internas durante la reorganización y el endurecimiento del proyecto. A partir de 1.0.0 se aplica semver convencional.
+
+---
+
+## [1.0.0] — 2026-05-15
+
+### Primer release público estable
+
+Marca viviLoaiza presente en home, respaldo y ayuda; flujo simplificado; UI lista para entregar a clientas.
+
+### Marca viviLoaiza en toda la app
+
+- **Tarjeta del home** antes de la tarjeta de Spotify: avatar "vL" + título + dos chips de enlace, **sitio (viviloaiza.cl)** e **Instagram (@viviloaiza.cl)**, este último con gradiente IG y logo SVG oficial.
+- **Vista de Respaldo:** reemplazada la caja de "Preferencias" por un bloque "Sobre viviLoaiza" con avatar grande, presentación y los dos enlaces (sitio + Instagram) como botones destacados.
+- **Vista de Ayuda:** al final de la guía aparece el bloque "Sobre la creadora" con los mismos enlaces, antes de los botones de acción.
+- Todos los enlaces abren en pestaña nueva con `noopener noreferrer` por seguridad.
+
+### UI
+
+- Eliminada la etiqueta **BETA** del header del home — la app pasa a release público.
+- Espaciado vertical uniforme entre tarjetas del home (16 px) — antes "Antes de empezar" quedaba pegada a "Instalar en tu teléfono".
+- En la vista de Ayuda se mantiene el botón secundario **"Probar con ejemplo"** junto al CTA principal, coherente con la tarjeta de bienvenida.
+
+### Eliminado
+
+- Toggle "Mostrar precios con IVA" en la vista de Respaldo. El IVA queda **siempre activo** en home, detalle, resultados y al compartir por WhatsApp. Motivo: simplificar la app y evitar configuraciones que invitan al error.
+- Limpieza asociada: clave `KEY_SHOW_IVA` en localStorage, funciones `isIvaVisible`/`applyIvaPreference`/`toggleShowIva`, clases CSS `.pref-toggle*`, `.pref-switch`, `.pref-slider`, `.hide-iva`.
+
 ---
 
 ## [1.4.0] — 2026-05-12

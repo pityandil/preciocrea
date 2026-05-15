@@ -30,7 +30,6 @@ const WISDOMS = [
 const KEY_PRODUCTS  = 'pc_v1';
 const KEY_BACKUP    = 'pc_last_backup';
 const KEY_ONBOARD   = 'pc_onboarding_done';
-const KEY_SHOW_IVA  = 'pc_show_iva';
 
 // SVG inline de marcas (uso referencial, ver disclaimer en el footer)
 const ICONS = {
@@ -47,7 +46,6 @@ const ICONS = {
     const saved = localStorage.getItem(KEY_PRODUCTS);
     if (saved) S.products = JSON.parse(saved);
   } catch(e) {}
-  applyIvaPreference();
   renderHome();
   renderOnboarding();
   setupInstallPrompt();
@@ -200,26 +198,6 @@ function startCalcWithExample() {
 }
 
 // ===================================================
-// PREFERENCIA: MOSTRAR / OCULTAR IVA
-// ===================================================
-function isIvaVisible() {
-  try { return localStorage.getItem(KEY_SHOW_IVA) !== '0'; }
-  catch(e) { return true; }
-}
-
-function applyIvaPreference() {
-  const visible = isIvaVisible();
-  document.body.classList.toggle('hide-iva', !visible);
-  const cb = document.getElementById('pref-show-iva');
-  if (cb) cb.checked = visible;
-}
-
-function toggleShowIva(checked) {
-  try { localStorage.setItem(KEY_SHOW_IVA, checked ? '1' : '0'); } catch(e) {}
-  applyIvaPreference();
-}
-
-// ===================================================
 // DUPLICAR / COMPARTIR
 // ===================================================
 function duplicateProduct(id) {
@@ -243,12 +221,11 @@ function shareWhatsApp(id) {
   const lines = [
     `Hola! Te paso la cotización de *${p.name}* ${p.emoji}`,
     ``,
-    `💰 Precio: ${fmt(p.idealP)}`
+    `💰 Precio: ${fmt(p.idealP)}`,
+    `🧾 Con IVA: ${fmt(p.idealP * (1 + IVA))}`,
+    ``,
+    `¡Gracias por confiar en mi trabajo! 💛`
   ];
-  if (isIvaVisible()) {
-    lines.push(`🧾 Con IVA: ${fmt(p.idealP * (1 + IVA))}`);
-  }
-  lines.push(``, `¡Gracias por confiar en mi trabajo! 💛`);
   const url = `https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`;
   window.open(url, '_blank', 'noopener,noreferrer');
 }

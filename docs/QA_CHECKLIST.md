@@ -43,14 +43,15 @@ Cada release debe bumpear `VERSION` en `sw.js` para invalidar el caché viejo.
 
 ## Compartir y duplicar
 
-- [ ] Botón WhatsApp abre wa.me en pestaña nueva con el mensaje pre-armado, incluyendo nombre y precio. Si IVA está activo, incluye la línea c/IVA.
+- [ ] Botón WhatsApp abre wa.me en pestaña nueva con el mensaje pre-armado, incluyendo nombre, precio y línea c/IVA.
 - [ ] Botón "Duplicar" crea una copia con sufijo "(copia)" en el nombre y fecha de hoy. La copia es independiente de la original.
 
-## Preferencia IVA
+## Marca viviLoaiza
 
-- [ ] Apagar el toggle "Mostrar precios con IVA" en la vista de respaldo: en home, detalle y resultados desaparecen las líneas c/IVA.
-- [ ] Recargar: la preferencia se mantiene.
-- [ ] Compartir por WhatsApp con IVA apagado: el mensaje no incluye la línea de IVA.
+- [ ] Tarjeta de viviLoaiza en el home: muestra avatar "vL", enlaces a sitio (viviloaiza.cl) y a Instagram (@viviloaiza.cl). Ambos abren en pestaña nueva.
+- [ ] Vista de Respaldo: el bloque "Sobre viviLoaiza" muestra los dos enlaces (sitio + Instagram) y reemplaza por completo el antiguo toggle de IVA.
+- [ ] Vista de Ayuda: al final aparece el bloque "Sobre la creadora" con los dos enlaces antes del botón "Empezar a calcular".
+- [ ] IVA siempre activado: en home, detalle, resultados y WhatsApp se ve la línea c/IVA sin opción de ocultarla.
 
 ## PWA
 

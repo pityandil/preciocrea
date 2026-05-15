@@ -105,7 +105,7 @@ body {
    HOME VIEW
    ============================================================ */
 .home-top {
-  padding: 28px 22px 0;
+  padding: 28px 22px 16px;
 }
 
 .home-logo {
@@ -1574,7 +1574,7 @@ body {
   border: 1.5px solid var(--border);
   border-radius: var(--radius);
   padding: 20px 18px 16px;
-  margin: 0 22px 18px;
+  margin: 0 22px 16px;
   box-shadow: var(--shadow);
 }
 .onboard-card.show { display: block; }
@@ -1638,71 +1638,19 @@ body {
 .onboard-btn-primary:active,
 .onboard-btn-secondary:active { transform: translateY(1px); }
 
-/* ============================================================
-   PREFERENCIA: TOGGLE
-   ============================================================ */
-.pref-toggle {
+/* Fila de CTAs al final de la guía de Ayuda */
+.help-cta-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  cursor: pointer;
-  user-select: none;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 20px 16px 8px;
 }
-.pref-toggle-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 4px;
+.help-cta-row .onboard-btn-secondary {
+  padding: 12px 18px;
+  font-size: 13.5px;
 }
-.pref-toggle-sub {
-  font-size: 12.5px;
-  color: var(--muted);
-  line-height: 1.4;
-  font-weight: 600;
-}
-.pref-switch {
-  position: relative;
-  width: 48px;
-  height: 28px;
-  flex-shrink: 0;
-}
-.pref-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-  position: absolute;
-}
-.pref-slider {
-  position: absolute;
-  inset: 0;
-  background: var(--border);
-  border-radius: 50px;
-  transition: background 0.2s ease;
-}
-.pref-slider::before {
-  content: '';
-  position: absolute;
-  top: 3px;
-  left: 3px;
-  width: 22px;
-  height: 22px;
-  background: #fff;
-  border-radius: 50%;
-  transition: transform 0.22s cubic-bezier(0.34,1.2,0.64,1);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-}
-.pref-switch input:checked + .pref-slider {
-  background: linear-gradient(135deg, var(--coral), var(--purple));
-}
-.pref-switch input:checked + .pref-slider::before {
-  transform: translateX(20px);
-}
-
-/* Oculta toda la información de IVA cuando la preferencia está apagada */
-body.hide-iva .iva-row,
-body.hide-iva .iva-badge,
-body.hide-iva .iva-inline { display: none !important; }
 
 /* ============================================================
    ACCIONES SECUNDARIAS EN EL DETALLE (Duplicar / WhatsApp)
@@ -1734,7 +1682,7 @@ body.hide-iva .iva-inline { display: none !important; }
 .btn-install {
   display: none;
   width: 100%;
-  margin: 14px 0 0;
+  margin: 16px 0 0;
   padding: 14px 16px;
   border: none;
   border-radius: var(--radius-sm);
@@ -1885,4 +1833,248 @@ body.hide-iva .iva-inline { display: none !important; }
 .ios-modal-icon .brand-svg {
   width: 38px;
   height: 38px;
+}
+
+/* ============================================================
+   TARJETA VIVILOAIZA (home)
+   ============================================================ */
+.viviloaiza-card {
+  margin: 0 22px 16px;
+  background: var(--card, #fff);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.viviloaiza-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 80px;
+  background: linear-gradient(90deg, transparent, rgba(199,125,255,0.05));
+  pointer-events: none;
+}
+.vl-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+.vl-card-links {
+  display: flex;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+.vl-icon {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--coral), var(--purple));
+  color: #fff;
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 17px;
+  letter-spacing: -1px;
+  box-shadow: 0 4px 12px rgba(199,125,255,0.35);
+}
+.vl-text { flex: 1; min-width: 0; }
+.vl-label {
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.vl-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.25;
+}
+
+/* Chips de enlaces (sitio + Instagram) en la tarjeta del home */
+.vl-chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: transform 0.18s, box-shadow 0.18s, opacity 0.2s;
+  cursor: pointer;
+  min-width: 0;
+}
+.vl-chip:active {
+  transform: scale(0.96);
+  opacity: 0.92;
+}
+.vl-chip-web {
+  background: linear-gradient(135deg, var(--coral), #FF8C8C);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(255,107,107,0.32);
+}
+.vl-chip-ig {
+  background: linear-gradient(135deg, #F58529, #DD2A7B 50%, #8134AF);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(221,42,123,0.32);
+}
+.vl-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.vl-chip-icon svg {
+  width: 14px;
+  height: 14px;
+}
+.vl-chip-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   BLOQUE VIVILOAIZA (view-backup y view-help)
+   ============================================================ */
+.vl-block {
+  background: var(--card);
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  padding: 20px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+.vl-block::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 110px;
+  height: 110px;
+  background: radial-gradient(circle, rgba(199,125,255,0.12), transparent 70%);
+  pointer-events: none;
+}
+.vl-block-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+.vl-block-avatar {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--coral), var(--purple));
+  color: #fff;
+  font-family: 'Fraunces', serif;
+  font-weight: 900;
+  font-size: 19px;
+  letter-spacing: -1px;
+  box-shadow: 0 6px 16px rgba(199,125,255,0.4);
+}
+.vl-block-title {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.2;
+}
+.vl-block-sub {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  margin-top: 2px;
+}
+.vl-block-text {
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--text);
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+.vl-block-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+.vl-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: transform 0.18s, box-shadow 0.18s, opacity 0.2s;
+  cursor: pointer;
+  color: #fff;
+}
+.vl-link:active {
+  transform: scale(0.98);
+  opacity: 0.92;
+}
+.vl-link-web {
+  background: linear-gradient(135deg, var(--coral), #FF8C8C);
+  box-shadow: 0 6px 16px rgba(255,107,107,0.3);
+}
+.vl-link-ig {
+  background: linear-gradient(135deg, #F58529, #DD2A7B 50%, #8134AF);
+  box-shadow: 0 6px 16px rgba(221,42,123,0.3);
+}
+.vl-link-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.vl-link-icon svg {
+  width: 20px;
+  height: 20px;
+}
+.vl-link-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.vl-link-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.vl-link-value {
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: -0.2px;
 }
